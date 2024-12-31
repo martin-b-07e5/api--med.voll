@@ -2,7 +2,7 @@ package med.voll.api.Record;
 
 public record DireccionDTO(
     String calle,
-    Integer numero,
+    String numero,
     String piso,
     String ciudad,
     String provincia,
