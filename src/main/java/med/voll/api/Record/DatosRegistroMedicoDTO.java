@@ -10,8 +10,5 @@ public record DatosRegistroMedicoDTO(
     // Aquí es un objeto, no una lista (Acepta "direccion" y "dirección")
     @JsonAlias("dirección") DireccionDTO direccion
 ) {
-  // Método para obtener la calle directamente desde la dirección
-  public String calle() {
-    return direccion != null ? direccion.calle() : null;
-  }
+
 }
