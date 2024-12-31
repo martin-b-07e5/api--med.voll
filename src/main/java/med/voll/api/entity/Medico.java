@@ -59,19 +59,14 @@ public class Medico {
     this.email = datos.email();
     this.documento = datos.documento();
     this.especialidad = datos.especialidad();
-
-    this.direccion = new Direccion(datos.direccion());
-    // Usar el constructor sin parámetros de Direccion y luego establecer los valores
-//    this.direccion = new Direccion();
-//    this.direccion.setCalle(datos.direccion().calle());
-//    this.direccion.setNumero(datos.direccion().numero());
-//    this.direccion.setPiso(datos.direccion().piso());
-//    this.direccion.setCiudad(datos.direccion().ciudad());
-//    this.direccion.setProvincia(datos.direccion().provincia());
-//    this.direccion.setPais(datos.direccion().pais());
-//    ;
-
-
+    this.direccion = new Direccion(
+        datos.direccion().calle(),
+        datos.direccion().numero(),
+        datos.direccion().piso(),
+        datos.direccion().ciudad(),
+        datos.direccion().provincia(),
+        datos.direccion().pais()
+    );
   }
 
 

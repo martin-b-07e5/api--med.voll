@@ -58,13 +58,14 @@ public class Direccion {
 
 
   // Constructor para inicializar los campos con parámetros
-  public Direccion(DireccionDTO direccion) {
-    this.calle = direccion.calle();
-    this.numero = direccion.numero();
-    this.piso = direccion.piso();
-    this.ciudad = direccion.ciudad();
-    this.provincia = direccion.provincia();
-    this.pais = direccion.pais();
+  // nro se cambio de Integer a String
+  public Direccion(String calle, String numero, String piso, String ciudad, String provincia, String pais) {
+    this.calle = calle;
+    this.numero = numero;
+    this.piso = piso;
+    this.ciudad = ciudad;
+    this.provincia = provincia;
+    this.pais = pais;
   }
 
 
