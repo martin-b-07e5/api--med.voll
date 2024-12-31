@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import med.voll.api.Record.DatosRegistroMedicoDTO;
 import med.voll.api.Record.DireccionDTO;
 
 /* Consideraciones
@@ -56,16 +57,19 @@ public class Direccion {
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El país solo puede contener letras y espacios")
   private String pais;
 
+  // consturctors
+  public Direccion() {
+  }
 
-  // Constructor para inicializar los campos con parámetros
-  // nro se cambio de Integer a String
-  public Direccion(String calle, String numero, String piso, String ciudad, String provincia, String pais) {
-    this.calle = calle;
-    this.numero = numero;
-    this.piso = piso;
-    this.ciudad = ciudad;
-    this.provincia = provincia;
-    this.pais = pais;
+
+  public Direccion(DatosRegistroMedicoDTO datos) {
+    // Suponiendo que DatosRegistroMedicoDTO tenga los métodos adecuados
+    this.calle = datos.direccion().calle();
+    this.numero = datos.direccion().numero();
+    this.piso = datos.direccion().piso();
+    this.ciudad = datos.direccion().ciudad();
+    this.provincia = datos.direccion().provincia();
+    this.pais = datos.direccion().pais();
   }
 
 

@@ -21,7 +21,7 @@ Médico
 @Table(name = "medicos")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 public class Medico {
 
@@ -53,21 +53,16 @@ public class Medico {
   @Embedded
   private Direccion direccion;
 
+  public Medico() {
+  }
+
   // Constructor para inicializar los campos con parámetros
   public Medico(DatosRegistroMedicoDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();
     this.documento = datos.documento();
     this.especialidad = datos.especialidad();
-    this.direccion = new Direccion(
-        datos.direccion().calle(),
-        datos.direccion().numero(),
-        datos.direccion().piso(),
-        datos.direccion().ciudad(),
-        datos.direccion().provincia(),
-        datos.direccion().pais()
-    );
+    this.direccion = new Direccion(datos);
   }
-
 
 }
