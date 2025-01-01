@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import med.voll.api.Record.DatosRegistroMedicoDTO;
 
 /* Consideraciones
 Dirección
@@ -61,7 +60,7 @@ public class Direccion {
   }
 
   // Constructor to initialize an address from the address data included in a DTO
-  public Direccion(DatosRegistroMedicoDTO datos) {
+  public Direccion(MedicoDTO datos) {
     this.calle = datos.direccion().calle();
     this.numero = datos.direccion().numero();
     this.piso = datos.direccion().piso();

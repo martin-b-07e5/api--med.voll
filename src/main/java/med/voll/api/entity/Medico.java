@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import med.voll.api.Record.EspecialidadEnum;
-import med.voll.api.Record.DatosRegistroMedicoDTO;
 
 /* Consideraciones
 Médico
@@ -56,7 +54,7 @@ public class Medico {
 
 
   // Constructor to initialize a doctor from a DTO containing personal and address data
-  public Medico(DatosRegistroMedicoDTO datos) {
+  public Medico(MedicoDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();
     this.documento = datos.documento();

@@ -1,8 +1,6 @@
-package med.voll.api.Record;
+package med.voll.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
-public record DatosRegistroMedicoDTO(
+public record MedicoDTO(
     String nombre,
     String email,
     String documento,

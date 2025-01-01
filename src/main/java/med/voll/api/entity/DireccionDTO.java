@@ -1,4 +1,4 @@
-package med.voll.api.Record;
+package med.voll.api.entity;
 
 public record DireccionDTO(
     String calle,
