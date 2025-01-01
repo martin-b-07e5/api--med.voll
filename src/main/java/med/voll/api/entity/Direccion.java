@@ -7,10 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import med.voll.api.Record.DatosRegistroMedicoDTO;
-import med.voll.api.Record.DireccionDTO;
 
 /* Consideraciones
 Dirección
@@ -19,13 +17,11 @@ Dirección
   piso  » Letras y números. No vacío.
   Ciudad  » Letras. No vacío.
   provincia  » Letras. No vacío.
-  pais  » Letras. No vacío.
-*/
+  pais  » Letras. No vacío. */
 
 @Embeddable
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Direccion {
 
@@ -36,7 +32,7 @@ public class Direccion {
   @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "El número no puede estar vacío")
   @Min(value = 1, message = "El número debe ser mayor a 0")
-  private String numero;
+  private Integer numero;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "El piso no puede estar vacío")
@@ -57,13 +53,15 @@ public class Direccion {
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El país solo puede contener letras y espacios")
   private String pais;
 
-  // consturctors
+  /// @NoArgsConstructor y las clases anotadas con @Embeddable puede no funcionar.
+  /// ❗En Spring y JPA, es crucial que las clases embebibles tengan un constructor sin argumentos EXPLÍCITAMENTE disponible.
+  /// ❗Sin embargo, Lombok genera este constructor de manera IMPLÍCITA, y en algunos casos JPA no lo reconoce adecuadamente.
+  // ❗consturctor
   public Direccion() {
   }
 
-
+  // Constructor to initialize an address from the address data included in a DTO
   public Direccion(DatosRegistroMedicoDTO datos) {
-    // Suponiendo que DatosRegistroMedicoDTO tenga los métodos adecuados
     this.calle = datos.direccion().calle();
     this.numero = datos.direccion().numero();
     this.piso = datos.direccion().piso();
@@ -71,6 +69,5 @@ public class Direccion {
     this.provincia = datos.direccion().provincia();
     this.pais = datos.direccion().pais();
   }
-
 
 }

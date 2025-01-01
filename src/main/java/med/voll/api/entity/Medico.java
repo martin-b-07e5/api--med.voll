@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 import med.voll.api.Record.EspecialidadEnum;
 import med.voll.api.Record.DatosRegistroMedicoDTO;
 
@@ -21,7 +21,7 @@ Médico
 @Table(name = "medicos")
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class Medico {
 
@@ -50,13 +50,12 @@ public class Medico {
   @Enumerated(EnumType.STRING)
   private EspecialidadEnum especialidad;
 
+
   @Embedded
   private Direccion direccion;
 
-  public Medico() {
-  }
 
-  // Constructor para inicializar los campos con parámetros
+  // Constructor to initialize a doctor from a DTO containing personal and address data
   public Medico(DatosRegistroMedicoDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();

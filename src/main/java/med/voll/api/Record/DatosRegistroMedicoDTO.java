@@ -7,8 +7,7 @@ public record DatosRegistroMedicoDTO(
     String email,
     String documento,
     EspecialidadEnum especialidad,
-    // Aquí es un objeto, no una lista (Acepta "direccion" y "dirección")
-    @JsonAlias("dirección") DireccionDTO direccion
+    DireccionDTO direccion
 ) {
 
 }
