@@ -52,9 +52,10 @@ public class Direccion {
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El país solo puede contener letras y espacios")
   private String pais;
 
-  /// @NoArgsConstructor y las clases anotadas con @Embeddable puede no funcionar.
-  /// ❗En Spring y JPA, es crucial que las clases embebibles tengan un constructor sin argumentos EXPLÍCITAMENTE disponible.
-  /// ❗Sin embargo, Lombok genera este constructor de manera IMPLÍCITA, y en algunos casos JPA no lo reconoce adecuadamente.
+  /// @NoArgsConstructor and classes annotated with @Embeddable may not work.
+  /// ❗In Spring and JPA, it is crucial that embeddable classes have an EXPLICITLY available no-argument constructor.
+  /// ❗However, Lombok generates this constructor implicitly, and in some cases, JPA does not recognize it properly.
+
   // ❗consturctor
   public Direccion() {
   }

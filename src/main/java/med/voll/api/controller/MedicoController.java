@@ -25,7 +25,7 @@ public class MedicoController {
   @PostMapping
   public void agregarMedico(@RequestBody MedicoDTO medicoDTO) {
     medicoService.registrarMedico(medicoDTO);
-    // medicoRepository.save(new Medico(datosRegistroMedicoDTO));  // before
+    // medicoRepository.save(new Medico(datosRegistroMedicoDTO));  // before using medicoService
   }
 
 }
