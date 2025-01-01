@@ -28,20 +28,17 @@ public class Medico {
   @Column(name = "id_medico") // nombre de la columna en la DB
   private Long idMedico;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
-  @NotBlank(message = "El nombre no puede estar vacío")
-  @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El nombre solo puede contener letras y espacios")
+  @NotBlank(message = "Field must not be null or empty.")
+  @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces.")
   private String nombre;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
-  @NotBlank(message = "El email no puede estar vacío")
-  @Email(message = "El email debe tener un formato válido")
+  @NotBlank(message = "Field must not be null or empty.")
+  @Email(message = "The email must have a valid format.")
   private String email;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
-  @NotBlank(message = "El documento no puede estar vacío")
-  @Pattern(regexp = "^\\d+$", message = "El documento debe contener solo números")
-  @Column(unique = true, nullable = false) // Para asegurar unicidad en la base de datos
+  @NotBlank(message = "Field must not be null or empty.")
+  @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
+  @Column(unique = true, nullable = false) // To ensure uniqueness in the database
   private String documento;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
@@ -53,7 +50,7 @@ public class Medico {
   private Direccion direccion;
 
 
-  // Constructor to initialize a doctor from a DTO containing personal and address data
+  // Constructor to initialize a doctor from a DTO containing personal and address data.
   public Medico(MedicoDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();
