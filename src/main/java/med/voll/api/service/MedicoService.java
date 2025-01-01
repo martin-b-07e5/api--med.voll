@@ -26,12 +26,12 @@ public class MedicoService {
 
     // Verificar unique email
     if (medicoRepository.existsByEmail(medicoDTO.email())) {
-      throw new RuntimeException("El email ya está en uso");
+      throw new RuntimeException("E-mail IS ALREADY IN USE");
     }
 
     // Verificar unique documento
-    if (medicoRepository.existsByEmail(medicoDTO.documento())) {
-      throw new RuntimeException("El documento ya está en uso");
+    if (medicoRepository.existsByDocumento(medicoDTO.documento())) {
+      throw new RuntimeException("Document IS ALREADY IN USE");
     }
 
     // Validar el DTO antes de pasarlo al mapper para la conversión

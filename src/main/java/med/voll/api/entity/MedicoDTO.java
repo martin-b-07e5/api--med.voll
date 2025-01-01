@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 public record MedicoDTO(
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El nombre solo puede contener letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces")
     String nombre,
 
     @NotBlank
@@ -26,6 +26,9 @@ public record MedicoDTO(
     @Enumerated(EnumType.STRING)
     EspecialidadEnum especialidad,
 
+    @NotBlank
+    @Pattern(regexp = "^\\d{4,10}$", message = "The value must be a 4 to 10 digit number.")
+    String telefono,
 
     @NotNull
     @Valid

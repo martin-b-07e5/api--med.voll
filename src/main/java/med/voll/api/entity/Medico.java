@@ -34,17 +34,21 @@ public class Medico {
 
   @NotBlank
   @Email(message = "The email must have a valid format.")
-  @Column(unique = true) // To ensure uniqueness in the database
+  @Column(unique = true)
   private String email;
 
   @NotBlank
-  @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
-  @Column(unique = true) // To ensure uniqueness in the database
+//  @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
+  @Column(unique = true)
   private String documento;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
   @Enumerated(EnumType.STRING)
   private EspecialidadEnum especialidad;
+
+  @NotBlank
+//  @Pattern(regexp = "^\\d{4,10}$")
+  private String telefono;
 
 
   @Embedded
@@ -57,6 +61,7 @@ public class Medico {
     this.email = datos.email();
     this.documento = datos.documento();
     this.especialidad = datos.especialidad();
+    this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
   }
 
