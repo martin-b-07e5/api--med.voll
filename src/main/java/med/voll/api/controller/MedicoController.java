@@ -24,7 +24,7 @@ public class MedicoController {
   }
 
   @PostMapping
-  public void agregarMedico(@Valid @RequestBody MedicoDTO medicoDTO) {
+  public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
     medicoService.registrarMedico(medicoDTO);
   }
 
