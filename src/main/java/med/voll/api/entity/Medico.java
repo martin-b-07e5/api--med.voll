@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 /* Consideraciones
 Médico
   Nombre  » Solo letras. No vacío.
-  Especialidad  » ORTOPEDIA, PEDIATRIA, CARDIOLOGIA, GINECOLOGIA, NEUROLOGIA. No vacío.
-  Documento  » Número de documento único. Solo números. No vacío.
   Email  » Formato de email. No vacío.
+  Documento  » Número de documento único. Solo números. No vacío.
+  Especialidad  » ORTOPEDIA, PEDIATRIA, CARDIOLOGIA, GINECOLOGIA, NEUROLOGIA. No vacío.
   Teléfono  » Solo números. No vacío. */
 
 @Entity(name = "Medico")  /*por default el nombre de la clase*/

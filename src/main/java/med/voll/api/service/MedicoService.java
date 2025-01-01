@@ -11,20 +11,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class MedicoService {
 
+  private final MedicoValidatorMapper medicoValidatorMapper;
   private final MedicoRepository medicoRepository;
-  private final MedicoMapper medicoMapper;
+//  private final MedicoMapper medicoMapper;
 
   // Constructor-based dependency injection
   @Autowired
-  public MedicoService(MedicoRepository medicoRepository, MedicoMapper medicoMapper) {
+  public MedicoService(MedicoValidatorMapper medicoValidatorMapper, MedicoRepository medicoRepository) {
+    this.medicoValidatorMapper = medicoValidatorMapper;
     this.medicoRepository = medicoRepository;
-    this.medicoMapper = medicoMapper;
   }
 
   public void registrarMedico(MedicoDTO medicoDTO) {
-    // Medico medico = new Medico(medicoDTO); // (before using MedicoMapper) Conversion from DTO to entity
-    Medico medico = medicoMapper.toEntity(medicoDTO); // Conversion from DTO to entity using MedicoMapper
-    /// Here, there could be more business logic, such as additional validations, etc.
-    medicoRepository.save(medico); // Persistencia
+    // Validar el DTO antes de pasarlo al mapper para la conversión
+    Medico medico = medicoValidatorMapper.toEntity(medicoDTO);
+
+    // Si el DTO es válido, se guarda en la base de datos
+    medicoRepository.save(medico);
   }
+
 }
