@@ -23,6 +23,17 @@ public class MedicoService {
   }
 
   public void registrarMedico(MedicoDTO medicoDTO) {
+
+    // Verificar unique email
+    if (medicoRepository.existsByEmail(medicoDTO.email())) {
+      throw new RuntimeException("El email ya está en uso");
+    }
+
+    // Verificar unique documento
+    if (medicoRepository.existsByEmail(medicoDTO.documento())) {
+      throw new RuntimeException("El documento ya está en uso");
+    }
+
     // Validar el DTO antes de pasarlo al mapper para la conversión
     Medico medico = medicoValidatorMapper.toEntity(medicoDTO);
 

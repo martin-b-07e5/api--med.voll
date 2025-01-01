@@ -24,30 +24,24 @@ Dirección
 @AllArgsConstructor
 public class Direccion {
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "La calle no puede estar vacía")
   private String calle;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
-  @NotBlank(message = "El número no puede estar vacío")
   @Min(value = 1, message = "El número debe ser mayor a 0")
   private Integer numero;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "El piso no puede estar vacío")
   private String piso;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "La ciudad no puede estar vacía")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "La ciudad solo puede contener letras y espacios")
   private String ciudad;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "La provincia no puede estar vacía")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "La provincia solo puede contener letras y espacios")
   private String provincia;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
   @NotBlank(message = "El país no puede estar vacío")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El país solo puede contener letras y espacios")
   private String pais;
@@ -55,8 +49,6 @@ public class Direccion {
   /// @NoArgsConstructor and classes annotated with @Embeddable may not work.
   /// ❗In Spring and JPA, it is crucial that embeddable classes have an EXPLICITLY available no-argument constructor.
   /// ❗However, Lombok generates this constructor implicitly, and in some cases, JPA does not recognize it properly.
-
-  // ❗consturctor
   public Direccion() {
   }
 

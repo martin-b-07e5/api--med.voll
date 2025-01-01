@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import jakarta.validation.Valid;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class MedicoController {
   }
 
   @PostMapping
-  public void agregarMedico(@RequestBody MedicoDTO medicoDTO) {
+  public void agregarMedico(@Valid @RequestBody MedicoDTO medicoDTO) {
     medicoService.registrarMedico(medicoDTO);
   }
 

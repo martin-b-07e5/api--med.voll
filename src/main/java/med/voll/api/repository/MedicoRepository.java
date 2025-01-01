@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
+  // pendiente de implementar
+  boolean existsByEmail(String email);
+
+  boolean existsByDocumento(String documento);
+
 }

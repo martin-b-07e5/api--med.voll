@@ -28,17 +28,18 @@ public class Medico {
   @Column(name = "id_medico") // nombre de la columna en la DB
   private Long idMedico;
 
-  @NotBlank(message = "Field must not be null or empty.")
-  @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces.")
+  @NotBlank
+//  @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces.")
   private String nombre;
 
-  @NotBlank(message = "Field must not be null or empty.")
+  @NotBlank
   @Email(message = "The email must have a valid format.")
+  @Column(unique = true) // To ensure uniqueness in the database
   private String email;
 
-  @NotBlank(message = "Field must not be null or empty.")
+  @NotBlank
   @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
-  @Column(unique = true, nullable = false) // To ensure uniqueness in the database
+  @Column(unique = true) // To ensure uniqueness in the database
   private String documento;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
