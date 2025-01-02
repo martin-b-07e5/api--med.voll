@@ -1,13 +1,14 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
+import med.voll.api.entity.Medico;
 import med.voll.api.entity.MedicoDTO;
+import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // In the controller, simply delegate the task to the service.
 
@@ -21,11 +22,17 @@ public class MedicoController {
   @Autowired
   public MedicoController(MedicoService medicoService) {
     this.medicoService = medicoService;
+
   }
 
   @PostMapping
   public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
     medicoService.registrarMedico(medicoDTO);
+  }
+
+  @GetMapping
+  public List<Medico> listarMedicos() {
+    return medicoService.listarMedicos();
   }
 
 }

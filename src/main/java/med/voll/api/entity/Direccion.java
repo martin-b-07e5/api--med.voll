@@ -1,5 +1,7 @@
 package med.voll.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Embeddable
 @Getter
 @Setter
@@ -17,25 +19,37 @@ import lombok.Setter;
 public class Direccion {
 
   @NotBlank(message = "La calle no puede estar vacía")
+  @Column(name = "direccion_calle")
+  @JsonProperty("calle")
   private String calle;
 
   @NotNull(message = "Field may not be null. However, the field can be empty.")
   @Min(value = 1, message = "El número debe ser mayor a 0")
+  @Column(name = "direccion_numero")
+  @JsonProperty("numero")
   private Integer numero;
 
   @NotBlank(message = "El piso no puede estar vacío")
+  @Column(name = "direccion_piso")
+  @JsonProperty("piso")
   private String piso;
 
   @NotBlank(message = "La ciudad no puede estar vacía")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "La ciudad solo puede contener letras y espacios")
+  @Column(name = "direccion_ciudad")
+  @JsonProperty("ciudad")
   private String ciudad;
 
   @NotBlank(message = "La provincia no puede estar vacía")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "La provincia solo puede contener letras y espacios")
+  @Column(name = "direccion_provincia")
+  @JsonProperty("provincia")
   private String provincia;
 
   @NotBlank(message = "El país no puede estar vacío")
   @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "El país solo puede contener letras y espacios")
+  @Column(name = "direccion_pais")
+  @JsonProperty("pais")
   private String pais;
 
   /// @NoArgsConstructor and classes annotated with @Embeddable may not work.
@@ -64,4 +78,15 @@ public class Direccion {
     this.pais = datos.direccion().pais();
   }
 
+  @Override
+  public String toString() {
+    return "Direccion{" +
+        "calle='" + calle + '\'' +
+        ", numero=" + numero +
+        ", piso='" + piso + '\'' +
+        ", ciudad='" + ciudad + '\'' +
+        ", provincia='" + provincia + '\'' +
+        ", pais='" + pais + '\'' +
+        '}';
+  }
 }
