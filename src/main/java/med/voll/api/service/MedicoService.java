@@ -1,5 +1,6 @@
 package med.voll.api.service;
 
+import med.voll.api.validation.MedicoValidatorMapper;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.Medico;
 import med.voll.api.repository.MedicoRepository;

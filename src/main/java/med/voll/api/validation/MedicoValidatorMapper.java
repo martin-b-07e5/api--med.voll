@@ -1,4 +1,4 @@
-package med.voll.api.service;
+package med.voll.api.validation;
 
 import med.voll.api.entity.DireccionDTO;
 import med.voll.api.entity.EspecialidadEnum;
@@ -92,9 +92,9 @@ public class MedicoValidatorMapper {
     if (calle == null || calle.isBlank()) {
       throw new IllegalArgumentException("La calle no puede estar vacía");
     }
-    // Supongamos que se espera que la calle tenga un formato específico (ejemplo: nombre de la calle)
-    String calleRegex = "^[a-zA-Z��-��\\s]+$";
-//    String calleRegex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$";
+    String calleRegex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s\\.]+$";
+
+
     if (!calle.matches(calleRegex)) {
       throw new IllegalArgumentException("La calle no tiene un formato válido");
     }

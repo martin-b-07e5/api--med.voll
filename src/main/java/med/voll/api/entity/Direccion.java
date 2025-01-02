@@ -9,14 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-/* Consideraciones
-Dirección
-  Calle  » Letras y números. No vacío.
-  Numero  » Solo números. No vacío.
-  piso  » Letras y números. No vacío.
-  Ciudad  » Letras. No vacío.
-  provincia  » Letras. No vacío.
-  pais  » Letras. No vacío. */
 
 @Embeddable
 @Getter
@@ -54,6 +46,16 @@ public class Direccion {
 
   // Constructor to initialize an address from the address data included in a DTO
   public Direccion(MedicoDTO datos) {
+    this.calle = datos.direccion().calle();
+    this.numero = datos.direccion().numero();
+    this.piso = datos.direccion().piso();
+    this.ciudad = datos.direccion().ciudad();
+    this.provincia = datos.direccion().provincia();
+    this.pais = datos.direccion().pais();
+  }
+
+  // Constructor para inicializar Direccion desde un PacienteDTO
+  public Direccion(PacienteDTO datos) {
     this.calle = datos.direccion().calle();
     this.numero = datos.direccion().numero();
     this.piso = datos.direccion().piso();

@@ -1,25 +1,27 @@
 package med.voll.api.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
-@Entity(name = "Medico")  /*default class name*/
-@Table(name = "medicos")
+@Entity
+@Table(name = "pacientes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Medico {
+public class Paciente {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id_medico") // nombre de la columna en la DB
-  private Long idMedico;
+  @Column(name = "id_paciente") // nombre de la columna en la DB
+  private Long idPaciente;
 
   @NotBlank
   private String nombre;
@@ -33,10 +35,6 @@ public class Medico {
   @Column(unique = true)
   private String documento;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
-  @Enumerated(EnumType.STRING)
-  private EspecialidadEnum especialidad;
-
   @NotBlank
   private String telefono;
 
@@ -46,11 +44,10 @@ public class Medico {
 
 
   // Constructor to initialize a doctor from a DTO containing personal and address data.
-  public Medico(MedicoDTO datos) {
+  public Paciente(PacienteDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();
     this.documento = datos.documento();
-    this.especialidad = datos.especialidad();
     this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
   }
