@@ -17,4 +17,7 @@ public record MedicoListadoDTO(
     String documento,
     String email
 ) {
+  public MedicoListadoDTO(Medico nombre) {
+    this(nombre.getNombre(), nombre.getEspecialidad().toString(), nombre.getDocumento(), nombre.getEmail());
+  }
 }

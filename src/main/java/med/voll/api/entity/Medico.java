@@ -7,7 +7,6 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NoArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity(name = "Medico")  /*default class name*/
@@ -66,21 +65,21 @@ public class Medico {
   }
 
   // getters
-  public @NotBlank String getNombre() {
-    return nombre;
-  }
+//  public @NotBlank String getNombre() {
+//    return nombre;
+//  }
 
-  public @NotNull EspecialidadEnum getEspecialidad() {
-    return especialidad;
-  }
+//  public @NotNull EspecialidadEnum getEspecialidad() {
+//    return especialidad;
+//  }
 
-  public @NotBlank String getDocumento() {
-    return documento;
-  }
+//  public @NotBlank String getDocumento() {
+//    return documento;
+//  }
 
-  public @NotBlank @Email String getEmail() {
-    return email;
-  }
+//  public @NotBlank @Email String getEmail() {
+//    return email;
+//  }
 
 
   @Override

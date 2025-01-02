@@ -70,17 +70,21 @@ public class MedicoService {
 
   public List<MedicoListadoDTO> listarMedicosParcial() {
     List<Medico> medicos = medicoRepository.findAll();
-
     // Mapea la lista de Medico a MedicoListadoDTO
-    List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
+
+    /*List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
         .map(medico -> new MedicoListadoDTO(
             medico.getNombre(),
-            medico.getEspecialidad().toString(), // Enum » String
+            medico.getEspecialidad().toString(),
             medico.getDocumento(),
             medico.getEmail()
         ))
         .collect(Collectors.toList());
-    return medicoListadoDTOS;
+    return medicoListadoDTOS;*/
+
+    return medicos.stream()
+        .map(MedicoListadoDTO::new)
+        .toList();
   }
 
 
