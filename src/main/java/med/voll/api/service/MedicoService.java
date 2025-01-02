@@ -1,5 +1,6 @@
 package med.voll.api.service;
 
+import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.mapper.MedicoValidatorMapper;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.Medico;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /// Creates a service to encapsulate business logic and handle the conversion of the DTO to the Medico entity before persisting it.
 
@@ -59,13 +61,26 @@ public class MedicoService {
 
   public List<Medico> listarMedicos() {
     List<Medico> medicos = medicoRepository.findAll();
-
-    // Verificar si la dirección se carga correctamente
     for (Medico medico : medicos) {
+      // Verificar si la dirección se carga correctamente
       System.out.println("Medico: " + medico);
     }
-
     return medicos;
+  }
+
+  public List<MedicoListadoDTO> listarMedicosParcial() {
+    List<Medico> medicos = medicoRepository.findAll();
+
+    // Mapea la lista de Medico a MedicoListadoDTO
+    List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
+        .map(medico -> new MedicoListadoDTO(
+            medico.getNombre(),
+            medico.getEspecialidad().toString(), // Enum » String
+            medico.getDocumento(),
+            medico.getEmail()
+        ))
+        .collect(Collectors.toList());
+    return medicoListadoDTOS;
   }
 
 

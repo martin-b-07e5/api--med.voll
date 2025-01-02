@@ -3,6 +3,7 @@ package med.voll.api.controller;
 import jakarta.validation.Valid;
 import med.voll.api.entity.Medico;
 import med.voll.api.entity.MedicoDTO;
+import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,13 @@ public class MedicoController {
     medicoService.registrarMedico(medicoDTO);
   }
 
+
   @GetMapping
-  public List<Medico> listarMedicos() {
-    return medicoService.listarMedicos();
+  public List<MedicoListadoDTO> listarMedicosParcial() {
+    // Implementación para listar medicos parcialmente (solo algunos campos)
+    return medicoService.listarMedicosParcial();
   }
+
 
 }
 
