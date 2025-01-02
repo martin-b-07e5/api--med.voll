@@ -1,6 +1,6 @@
 package med.voll.api.service;
 
-import med.voll.api.validation.MedicoValidatorMapper;
+import med.voll.api.mapper.MedicoValidatorMapper;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.Medico;
 import med.voll.api.repository.MedicoRepository;
@@ -25,12 +25,12 @@ public class MedicoService {
 
   public void registrarMedico(MedicoDTO medicoDTO) {
 
-    // Verificar unique email
+    // Verify unique email
     if (medicoRepository.existsByEmail(medicoDTO.email())) {
       throw new RuntimeException("E-mail IS ALREADY IN USE");
     }
 
-    // Verificar unique documento
+    // Verify unique documento
     if (medicoRepository.existsByDocumento(medicoDTO.documento())) {
       throw new RuntimeException("Document IS ALREADY IN USE");
     }

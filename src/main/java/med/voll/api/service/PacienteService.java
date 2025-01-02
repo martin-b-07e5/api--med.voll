@@ -3,7 +3,7 @@ package med.voll.api.service;
 import med.voll.api.entity.Paciente;
 import med.voll.api.entity.PacienteDTO;
 import med.voll.api.repository.PacienteRepository;
-import med.voll.api.validation.PacienteValidatorMapper;
+import med.voll.api.mapper.PacienteValidatorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

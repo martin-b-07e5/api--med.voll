@@ -1,9 +1,8 @@
-package med.voll.api.validation;
+package med.voll.api.mapper;
 
 import med.voll.api.entity.DireccionDTO;
-import med.voll.api.entity.EspecialidadEnum;
-import med.voll.api.entity.Medico;
-import med.voll.api.entity.MedicoDTO;
+import med.voll.api.entity.Paciente;
+import med.voll.api.entity.PacienteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import jakarta.validation.Validation;
@@ -11,31 +10,31 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @Component
-public class MedicoValidatorMapper {
+public class PacienteValidatorMapper {
 
   private final Validator validator;
 
   // Constructor-based dependency injection
   @Autowired
-  public MedicoValidatorMapper() {
+  public PacienteValidatorMapper() {
     // Configuración del validador de JSR-303 (Bean Validation)
     try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
       this.validator = factory.getValidator();
     }
   }
 
-  /// This Method validates the DTO and, if valid, converts it into a Medico entity.
-  public Medico toEntity(MedicoDTO dto) {
+  /// This Method validates the DTO and, if valid, converts it into a Paciente entity.
+  public Paciente toEntity(PacienteDTO dto) {
     validar(dto); // Validation of the DTO before conversion
-    return new Medico(dto); // We perform the conversion to the Medico entity
+    return new Paciente(dto); // We perform the conversion to the Paciente entity
   }
 
-  /// Validación personalizada para el DTO de Medico
-  private void validar(MedicoDTO dto) {
+  /// Validación personalizada para el DTO de Paciente
+  private void validar(PacienteDTO dto) {
     validateNombre(dto.nombre());
     validateEmail(dto.email());
     validateDocumento(dto.documento());
-    validateEspecialidad(dto.especialidad());
+
     // validate Direction
     validateDireccion(dto.direccion());
   }
@@ -68,12 +67,6 @@ public class MedicoValidatorMapper {
     String documentoRegex = "^\\d{4,10}$"; // Un ejemplo de formato numérico para el documento
     if (!documento.matches(documentoRegex)) {
       throw new IllegalArgumentException("El documento no tiene un formato válido");
-    }
-  }
-
-  private void validateEspecialidad(EspecialidadEnum especialidad) {
-    if (especialidad == null) {
-      throw new IllegalArgumentException("La especialidad no puede ser null");
     }
   }
 
