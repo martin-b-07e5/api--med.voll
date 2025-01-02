@@ -1,0 +1,1 @@
+alter table enfermeros add apellido varchar(20) not null;

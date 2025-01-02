@@ -29,16 +29,14 @@ public class Medico {
   private Long idMedico;
 
   @NotBlank
-//  @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces.")
   private String nombre;
 
   @NotBlank
-  @Email(message = "The email must have a valid format.")
+  @Email
   @Column(unique = true)
   private String email;
 
   @NotBlank
-//  @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
   @Column(unique = true)
   private String documento;
 
@@ -47,7 +45,6 @@ public class Medico {
   private EspecialidadEnum especialidad;
 
   @NotBlank
-//  @Pattern(regexp = "^\\d{4,10}$")
   private String telefono;
 
 
