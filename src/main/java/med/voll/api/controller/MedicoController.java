@@ -8,7 +8,9 @@ import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +45,9 @@ public class MedicoController {
 
   @GetMapping
   public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
-    return medicoService.listarMedicosParcial(pageable);
+    // Limitamos a 2 registros por página y orden ascendente por nombre
+    Pageable pageableConLimite = PageRequest.of(pageable.getPageNumber(), 2, Sort.by(Sort.Order.asc("nombre")));
+    return medicoService.listarMedicosParcial(pageableConLimite);
   }
 
 
