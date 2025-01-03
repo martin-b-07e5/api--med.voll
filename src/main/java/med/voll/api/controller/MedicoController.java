@@ -43,11 +43,12 @@ public class MedicoController {
 //  }
 
 
+  //  http://localhost:8080/medicos?page=0&size=2&sort=nombre,asc
   @GetMapping
   public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
-    // Limitamos a 2 registros por página y orden ascendente por nombre
-    Pageable pageableConLimite = PageRequest.of(pageable.getPageNumber(), 2, Sort.by(Sort.Order.asc("nombre")));
-    return medicoService.listarMedicosParcial(pageableConLimite);
+    // We limit to 2 records per page and ascending order by name.
+    Pageable pageableWithLimit = PageRequest.of(pageable.getPageNumber(), 2, Sort.by(Sort.Order.asc("nombre")));
+    return medicoService.listarMedicosParcial(pageableWithLimit);
   }
 
 

@@ -90,10 +90,10 @@ public class MedicoService {
   }*/
 
   public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
-    // Obtener la página de médicos desde el repositorio
+    // Fetch the page of doctors from the repository. findAll(pageable) returns a page of entities (Medic)
     Page<Medico> medicosPage = medicoRepository.findAll(pageable);
 
-    // Mapear la página de médicos a una página de DTOs
+    // Map the doctors page to a DTOs page
     return medicosPage.map(medico -> new MedicoListadoDTO(
         medico.getNombre(),
         medico.getEspecialidad().toString(),

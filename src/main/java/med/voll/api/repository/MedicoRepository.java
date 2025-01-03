@@ -17,5 +17,4 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
   boolean existsByDocumento(String documento);
 
-
 }
