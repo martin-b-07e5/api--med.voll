@@ -6,6 +6,8 @@ import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.Medico;
 import med.voll.api.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,23 +70,36 @@ public class MedicoService {
     return medicos;
   }
 
-  public List<MedicoListadoDTO> listarMedicosParcial() {
+  /*public List<MedicoListadoDTO> listarMedicosParcial() {
     List<Medico> medicos = medicoRepository.findAll();
     // Mapea la lista de Medico a MedicoListadoDTO
 
-    /*List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
-        .map(medico -> new MedicoListadoDTO(
-            medico.getNombre(),
-            medico.getEspecialidad().toString(),
-            medico.getDocumento(),
-            medico.getEmail()
-        ))
-        .collect(Collectors.toList());
-    return medicoListadoDTOS;*/
+//    List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
+//        .map(medico -> new MedicoListadoDTO(
+//            medico.getNombre(),
+//            medico.getEspecialidad().toString(),
+//            medico.getDocumento(),
+//            medico.getEmail()
+//        ))
+//        .collect(Collectors.toList());
+//    return medicoListadoDTOS;
 
     return medicos.stream()
         .map(MedicoListadoDTO::new)
         .toList();
+  }*/
+
+  public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
+    // Obtener la página de médicos desde el repositorio
+    Page<Medico> medicosPage = medicoRepository.findAll(pageable);
+
+    // Mapear la página de médicos a una página de DTOs
+    return medicosPage.map(medico -> new MedicoListadoDTO(
+        medico.getNombre(),
+        medico.getEspecialidad().toString(),
+        medico.getDocumento(),
+        medico.getEmail()
+    ));
   }
 
 

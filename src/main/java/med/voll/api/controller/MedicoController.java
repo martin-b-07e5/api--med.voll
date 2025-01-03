@@ -7,6 +7,8 @@ import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,10 +34,16 @@ public class MedicoController {
   }
 
 
+//  @GetMapping
+//  public List<MedicoListadoDTO> listarMedicosParcial() {
+//    // Implementación para listar medicos parcialmente (solo algunos campos)
+//    return medicoService.listarMedicosParcial();
+//  }
+
+
   @GetMapping
-  public List<MedicoListadoDTO> listarMedicosParcial() {
-    // Implementación para listar medicos parcialmente (solo algunos campos)
-    return medicoService.listarMedicosParcial();
+  public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
+    return medicoService.listarMedicosParcial(pageable);
   }
 
 
