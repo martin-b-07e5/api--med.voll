@@ -6,11 +6,14 @@ import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,13 +45,22 @@ public class MedicoController {
 //    return medicoService.listarMedicosParcial();
 //  }
 
+  private static final Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
-  //  http://localhost:8080/medicos?page=0&size=2&sort=nombre,asc
+
+  // http://localhost:8080/medicos?&size=2
+  // http://localhost:8080/medicos?page=0&size=2&sort=nombre,asc
+  // http://localhost:8080/medicos?size=2&sort=nombre,asc
   @GetMapping
-  public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
-    // We limit to 2 records per page and ascending order by name.
-    Pageable pageableWithLimit = PageRequest.of(pageable.getPageNumber(), 2, Sort.by(Sort.Order.asc("nombre")));
-    return medicoService.listarMedicosParcial(pageableWithLimit);
+  public Page<MedicoListadoDTO> listarMedicosParcial(
+      @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
+
+    // Print by console (log)
+    logger.info("Página solicitada: {}", pageable.getPageNumber());
+    logger.info("Tamaño de página: {}", pageable.getPageSize());
+    logger.info("Ordenamiento: {}", pageable.getSort());
+
+    return medicoService.listarMedicosParcial(pageable);
   }
 
 
