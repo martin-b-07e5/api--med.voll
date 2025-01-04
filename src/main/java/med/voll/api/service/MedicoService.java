@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /// Creates a service to encapsulate business logic and handle the conversion of the DTO to the Medico entity before persisting it.
 

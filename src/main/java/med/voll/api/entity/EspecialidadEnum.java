@@ -8,7 +8,12 @@ public enum EspecialidadEnum {
   PEDIATRIA("pediatria"),
   CARDIOLOGIA("cardiologia"),
   GINECOLOGIA("ginecologia"),
-  NEUROLOGIA("neurologia");
+  NEUROLOGIA("neurologia"),
+  INGENIERO("ingeniero"),
+  SOPORTE("soporte"),
+  COORDINADOR("soporte"),
+  FAMILY("soporte"),
+  INSTALADOR("instalador");
 
   private final String description;
 
