@@ -9,9 +9,4 @@ public record MedicoListadoDTOActualizar(
     String documento,
     @Valid Direccion direccion
 ) {
-  // constructor
-  public MedicoListadoDTOActualizar(Medico medico) {
-    this(medico.getId(), medico.getNombre(), medico.getDocumento(), medico.getDireccion());
-  }
-
 }

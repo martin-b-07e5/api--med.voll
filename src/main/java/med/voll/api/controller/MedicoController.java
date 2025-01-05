@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 // In the controller, simply delegate the task to the service.
 
 @RestController
@@ -28,17 +27,12 @@ public class MedicoController {
 
   private static final Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
-  private final MedicoService medicoService;
-  private final MedicoRepository medicoRepository;
-
-  // Constructor-based dependency injection
   @Autowired
-  public MedicoController(MedicoService medicoService,
-                          MedicoRepository medicoRepository) {
-    this.medicoService = medicoService;
+  private MedicoService medicoService;
 
-    this.medicoRepository = medicoRepository;
-  }
+  @Autowired
+  private MedicoRepository medicoRepository;
+
 
   // read
   //  http://localhost:8080/medicos/listar
@@ -86,15 +80,9 @@ public class MedicoController {
   // update
   @PutMapping
   @Transactional
+  // @Transactional(rollbackFor = Exception.class) // If you want to rollback in case of any exception
   public void actualizarMedico(@RequestBody @Valid MedicoListadoDTOActualizar datosActualizarMedico) {
-    Medico medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
-    logger.info("Medico: {}", medico);
-    logger.info("-------------controller1-------------------");
-    medico.actualizarDatos(datosActualizarMedico);
-    logger.info("-------------controller1-------------------");
-    logger.info("datosActualizarMedico: {}", datosActualizarMedico);
-    logger.info("datosActualizarMedico.id(): {}", datosActualizarMedico.id());
-    logger.info("datosActualizarMedico.direccion: {}", datosActualizarMedico.direccion());
+    medicoService.updateMedico(datosActualizarMedico);
   }
 
 

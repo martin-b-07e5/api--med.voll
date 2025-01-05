@@ -58,7 +58,7 @@ public class Direccion {
   public Direccion() {
   }
 
-  // Constructor to initialize an address from the address data included in a DTO
+  // Constructor para inicializar Direccion desde un MedicoDTO
   public Direccion(MedicoDTO datos) {
     this.calle = datos.direccion().calle();
     this.numero = datos.direccion().numero();
@@ -90,18 +90,5 @@ public class Direccion {
         ", pais='" + pais + '\'' +
         '}';
   }
-
-
-  public Direccion actualizarDatos(Direccion direccion) {
-    this.calle = direccion.calle;
-    this.numero = direccion.numero;
-    this.piso = direccion.piso;
-    this.ciudad = direccion.ciudad;
-    this.provincia = direccion.provincia;
-    this.pais = direccion.pais;
-//    return this;
-    return direccion;
-  }
-
 
 }
