@@ -1,13 +1,11 @@
 package med.voll.api.service;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import med.voll.api.controller.MedicoController;
-import med.voll.api.entity.MedicoListadoDTO;
-import med.voll.api.entity.MedicoListadoDTOActualizar;
+import med.voll.api.entity.*;
 import med.voll.api.mapper.MedicoValidatorMapper;
-import med.voll.api.entity.MedicoDTO;
-import med.voll.api.entity.Medico;
 import med.voll.api.repository.MedicoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,48 +95,67 @@ public class MedicoService {
   }
 
   // update
-  public void updateMedico(MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+  public void updateMedico(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
-    Medico medico = medicoRepository.findById(medicoListadoDTOActualizar.id())
+    Medico medico = medicoRepository.findById(medicoUpdateDTO.id())
         .orElseThrow(() -> new EntityNotFoundException("Médico no encontrado"));
 
     // Update only allowed fields
-    if (medicoListadoDTOActualizar.nombre() != null) {
-      medico.setNombre(medicoListadoDTOActualizar.nombre());
+    if (medicoUpdateDTO.nombre() != null) {
+      medico.setNombre(medicoUpdateDTO.nombre());
     }
-    if (medicoListadoDTOActualizar.documento() != null) {
-      medico.setDocumento(medicoListadoDTOActualizar.documento());
+    if (medicoUpdateDTO.documento() != null) {
+      medico.setDocumento(medicoUpdateDTO.documento());
     }
-    if (medicoListadoDTOActualizar.direccion() != null) {
-      medico.setDireccion(medicoListadoDTOActualizar.direccion());
+    if (medicoUpdateDTO.direccion() != null) {
+      medico.setDireccion(medicoUpdateDTO.direccion());
     }
 
     medicoRepository.save(medico);
   }
 
   @Transactional
-  public void updateMedico2(MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+  public void updateMedico2(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
-    Medico medico = medicoRepository.getReferenceById(medicoListadoDTOActualizar.id());
+    Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.id());
 
     // Update only allowed fields
-    if (medicoListadoDTOActualizar.nombre() != null) {
-      medico.setNombre(medicoListadoDTOActualizar.nombre());
+    if (medicoUpdateDTO.nombre() != null) {
+      medico.setNombre(medicoUpdateDTO.nombre());
     }
-    if (medicoListadoDTOActualizar.documento() != null) {
-      medico.setDocumento(medicoListadoDTOActualizar.documento());
+    if (medicoUpdateDTO.documento() != null) {
+      medico.setDocumento(medicoUpdateDTO.documento());
     }
-    if (medicoListadoDTOActualizar.direccion() != null) {
-      medico.setDireccion(medicoListadoDTOActualizar.direccion());
+    if (medicoUpdateDTO.direccion() != null) {
+      medico.setDireccion(medicoUpdateDTO.direccion());
     }
 
-    // Save is not necessary if the entity is already managed
+    /* // Save is not necessary if the entity is already managed
     // However, it can be added explicitly for clarity
     // It is not necessary to call save() as the transaction will automatically save the changes.
     // it needs @Transactional, so I can comment the next line.
-//    medicoRepository.save(medico);
+    medicoRepository.save(medico);*/
+
   }
+
+  // delete
+  public void eliminarMedicoHard(Long id) {
+    Medico medico = medicoRepository.getReferenceById(id);
+    medicoRepository.delete(medico);
+  }
+
+  @Transactional
+  public void excluirMedico(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+    Medico medico = medicoRepository.getReferenceById(id);
+    medico.setActivo(medicoExclusionDTO.activo()); // Actualiza el campo 'activo'
+  }
+
+  @Transactional(readOnly = true)
+  public List<Medico> listarMedicosActivos() {
+    return medicoRepository.findByActivoTrue();
+  }
+
 
 }

@@ -1,11 +1,7 @@
 package med.voll.api.controller;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.entity.Medico;
-import med.voll.api.entity.MedicoDTO;
-import med.voll.api.entity.MedicoListadoDTO;
-import med.voll.api.entity.MedicoListadoDTOActualizar;
+import med.voll.api.entity.*;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.slf4j.Logger;
@@ -30,8 +26,8 @@ public class MedicoController {
   @Autowired
   private MedicoService medicoService;
 
-  @Autowired
-  private MedicoRepository medicoRepository;
+//  @Autowired
+//  private MedicoRepository medicoRepository;
 
 
   // read
@@ -79,8 +75,23 @@ public class MedicoController {
 
   // update
   @PutMapping
-  public void actualizarMedico(@RequestBody @Valid MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
-    medicoService.updateMedico2(medicoListadoDTOActualizar);
+  public void actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
+    medicoService.updateMedico2(medicoUpdateDTO);
+  }
+
+  @DeleteMapping("/{id}")
+  public void eliminarMedicoHard(@PathVariable Long id) {
+    medicoService.eliminarMedicoHard(id);
+  }
+
+  @PutMapping("/{id}/excluir")
+  public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
+    medicoService.excluirMedico(id, medicoExclusionDTO);
+  }
+
+  @GetMapping("/activos")
+  public List<Medico> listarMedicosActivos() {
+    return medicoService.listarMedicosActivos();
   }
 
 }

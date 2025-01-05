@@ -45,10 +45,12 @@ public class Medico {
   @JsonProperty("telefono")
   private String telefono;
 
-
   @Embedded
   @JsonProperty("direccion")
   private Direccion direccion;
+
+  @Column(nullable = false)
+  private boolean activo = true;
 
 
   // default constructor
