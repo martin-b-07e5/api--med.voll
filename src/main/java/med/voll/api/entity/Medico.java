@@ -3,10 +3,15 @@ package med.voll.api.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import med.voll.api.controller.MedicoController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity(name = "Medico")  /*default class name*/
@@ -16,10 +21,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Medico {
 
+  private static final Logger logger = LoggerFactory.getLogger(Medico.class);
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_medico") // nombre de la columna en la DB
-  private Long idMedico;
+  private Long id;
 
   @NotBlank
   @JsonProperty("nombre")
@@ -70,7 +77,7 @@ public class Medico {
   @Override
   public String toString() {
     return "Medico{" +
-        "idMedico=" + idMedico +
+        "idMedico=" + id +
         ", nombre='" + nombre + '\'' +
         ", email='" + email + '\'' +
         ", documento='" + documento + '\'' +
@@ -78,6 +85,50 @@ public class Medico {
         ", telefono='" + telefono + '\'' +
         ", direccion=" + direccion +
         '}';
+  }
+
+
+  public void actualizarDatos1(@Valid MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+
+    if (medicoListadoDTOActualizar.nombre() != null) {
+      this.nombre = medicoListadoDTOActualizar.nombre();
+    }
+    if (medicoListadoDTOActualizar.documento() != null) {
+      this.documento = medicoListadoDTOActualizar.documento();
+    }
+    if (this.direccion != null) {
+      this.direccion = this.direccion.actualizarDatos(medicoListadoDTOActualizar.direccion());
+    } else {
+      logger.info("direccion: {}", direccion);
+      logger.info("getDireccion(): {}", getDireccion());
+    }
+
+  }
+
+
+  public void actualizarDatos(@Valid MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+
+    if (medicoListadoDTOActualizar.nombre() != null) {
+      this.nombre = medicoListadoDTOActualizar.nombre();
+    }
+    if (medicoListadoDTOActualizar.documento() != null) {
+      this.documento = medicoListadoDTOActualizar.documento();
+    }
+
+    // Verificar si la dirección no es null antes de intentar actualizarla
+    if (medicoListadoDTOActualizar.direccion() != null) {
+      logger.info("por que no entra acá");
+      if (this.direccion != null) {
+        this.direccion = this.direccion.actualizarDatos(medicoListadoDTOActualizar.direccion());
+      } else {
+        this.direccion = medicoListadoDTOActualizar.direccion();
+      }
+    } else {
+      logger.info("¿por qué medicoListadoDTOActualizar.direccion() = null");
+      logger.info("direccion: {}", direccion);
+      logger.info("getDireccion(): {}", getDireccion());
+      logger.info("calle: {}", getDireccion().getCalle());
+    }
   }
 
 

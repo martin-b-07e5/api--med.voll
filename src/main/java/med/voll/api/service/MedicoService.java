@@ -5,7 +5,6 @@ import med.voll.api.mapper.MedicoValidatorMapper;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.Medico;
 import med.voll.api.repository.MedicoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,18 +13,38 @@ import java.util.List;
 
 /// Creates a service to encapsulate business logic and handle the conversion of the DTO to the Medico entity before persisting it.
 
+
+/*Consideraciones
+
+Actualización de Médicos
+
+Información permitida para actualización
+  - Nombre
+  - Documento
+  - Dirección
+
+Reglas del negocio
+  - No permitir actualizar email, especialidad y documento.
+*/
+
 @Service
 public class MedicoService {
 
-  @Autowired
-  private MedicoRepository medicoRepository;
+//  @Autowired
+//  private MedicoRepository medicoRepository;
 
-  @Autowired
-  MedicoValidatorMapper medicoValidatorMapper;
+//  @Autowired
+//  MedicoValidatorMapper medicoValidatorMapper;
 
+  private final MedicoRepository medicoRepository;
+  private final MedicoValidatorMapper medicoValidatorMapper;
 
-//  private final MedicoValidatorMapper medicoValidatorMapper;
-//  private final MedicoRepository medicoRepository;
+  // Constructor-based dependency injection
+  public MedicoService(MedicoRepository medicoRepository, MedicoValidatorMapper medicoValidatorMapper) {
+    this.medicoRepository = medicoRepository;
+    this.medicoValidatorMapper = medicoValidatorMapper;
+  }
+
 
   // Constructor-based dependency injection
 //  public MedicoService(MedicoValidatorMapper medicoValidatorMapper, MedicoRepository medicoRepository) {
@@ -37,6 +56,7 @@ public class MedicoService {
 //    this.medicoRepository = medicoRepository;
 //  }
 
+  // create
   public void registrarMedico(MedicoDTO medicoDTO) {
 
     // Verify unique email
@@ -57,6 +77,7 @@ public class MedicoService {
   }
 
 
+  // read
   public List<Medico> listarMedicos() {
     return medicoRepository.findAll();
   }
@@ -86,6 +107,7 @@ public class MedicoService {
 
     // Map the doctors page to a DTOs page
     return medicosPage.map(medico -> new MedicoListadoDTO(
+        medico.getId(),
         medico.getNombre(),
         medico.getEspecialidad().toString(),
         medico.getDocumento(),
@@ -98,5 +120,19 @@ public class MedicoService {
     return medicos.map(MedicoListadoDTO::new);
   }
 
+
+  // update
+//  public void actualizarMedico(Long id, MedicoDTO medicoDTO) {
+//
+//    // Find the medico by ID
+//    Medico medico = medicoRepository.findById(id)
+//        .orElseThrow(() -> new RuntimeException("Medico not found"));
+//
+//    // Copy the updated fields from the DTO to the medico entity
+//    medico.setNombre(medicoDTO.nombre());
+//    medico.setEspecialidad(medicoDTO.especialidad());
+//    medico.setDocumento(medicoDTO.documento());
+//    medico.setEmail(medicoDTO.email());
+//  }
 
 }

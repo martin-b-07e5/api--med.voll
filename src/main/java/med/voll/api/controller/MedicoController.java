@@ -1,9 +1,12 @@
 package med.voll.api.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.entity.Medico;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.MedicoListadoDTO;
+import med.voll.api.entity.MedicoListadoDTOActualizar;
+import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,20 +29,18 @@ public class MedicoController {
   private static final Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
   private final MedicoService medicoService;
+  private final MedicoRepository medicoRepository;
 
   // Constructor-based dependency injection
   @Autowired
-  public MedicoController(MedicoService medicoService) {
+  public MedicoController(MedicoService medicoService,
+                          MedicoRepository medicoRepository) {
     this.medicoService = medicoService;
 
+    this.medicoRepository = medicoRepository;
   }
 
-  @PostMapping
-  public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
-    medicoService.registrarMedico(medicoDTO);
-  }
-
-
+  // read
   //  http://localhost:8080/medicos/listar
   @GetMapping("/listar")
   public List<Medico> listarMedicos() {
@@ -73,6 +74,27 @@ public class MedicoController {
   public Page<MedicoListadoDTO> listarPaginadoEquivalente(
       @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
     return medicoService.listarPaginadoEquivalente(pageable);
+  }
+
+
+  // create
+  @PostMapping
+  public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
+    medicoService.registrarMedico(medicoDTO);
+  }
+
+  // update
+  @PutMapping
+  @Transactional
+  public void actualizarMedico(@RequestBody @Valid MedicoListadoDTOActualizar datosActualizarMedico) {
+    Medico medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
+    logger.info("Medico: {}", medico);
+    logger.info("-------------controller1-------------------");
+    medico.actualizarDatos(datosActualizarMedico);
+    logger.info("-------------controller1-------------------");
+    logger.info("datosActualizarMedico: {}", datosActualizarMedico);
+    logger.info("datosActualizarMedico.id(): {}", datosActualizarMedico.id());
+    logger.info("datosActualizarMedico.direccion: {}", datosActualizarMedico.direccion());
   }
 
 

@@ -19,7 +19,7 @@ import lombok.Setter;
 public class Direccion {
 
   @NotBlank(message = "La calle no puede estar vacía")
-  @Column(name = "direccion_calle")
+  @Column(name = "calle")
   @JsonProperty("calle")
   private String calle;
 
@@ -78,6 +78,7 @@ public class Direccion {
     this.pais = datos.direccion().pais();
   }
 
+
   @Override
   public String toString() {
     return "Direccion{" +
@@ -89,4 +90,18 @@ public class Direccion {
         ", pais='" + pais + '\'' +
         '}';
   }
+
+
+  public Direccion actualizarDatos(Direccion direccion) {
+    this.calle = direccion.calle;
+    this.numero = direccion.numero;
+    this.piso = direccion.piso;
+    this.ciudad = direccion.ciudad;
+    this.provincia = direccion.provincia;
+    this.pais = direccion.pais;
+//    return this;
+    return direccion;
+  }
+
+
 }
