@@ -79,11 +79,8 @@ public class MedicoController {
 
   // update
   @PutMapping
-  @Transactional
-  // @Transactional(rollbackFor = Exception.class) // If you want to rollback in case of any exception
-  public void actualizarMedico(@RequestBody @Valid MedicoListadoDTOActualizar datosActualizarMedico) {
-    medicoService.updateMedico(datosActualizarMedico);
+  public void actualizarMedico(@RequestBody @Valid MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+    medicoService.updateMedico2(medicoListadoDTOActualizar);
   }
-
 
 }

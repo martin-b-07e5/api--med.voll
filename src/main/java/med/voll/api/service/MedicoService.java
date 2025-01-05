@@ -1,6 +1,7 @@
 package med.voll.api.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import med.voll.api.controller.MedicoController;
 import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.entity.MedicoListadoDTOActualizar;
@@ -114,6 +115,30 @@ public class MedicoService {
     }
 
     medicoRepository.save(medico);
+  }
+
+  @Transactional
+  public void updateMedico2(MedicoListadoDTOActualizar medicoListadoDTOActualizar) {
+
+    // Get the medico from the DB
+    Medico medico = medicoRepository.getReferenceById(medicoListadoDTOActualizar.id());
+
+    // Update only allowed fields
+    if (medicoListadoDTOActualizar.nombre() != null) {
+      medico.setNombre(medicoListadoDTOActualizar.nombre());
+    }
+    if (medicoListadoDTOActualizar.documento() != null) {
+      medico.setDocumento(medicoListadoDTOActualizar.documento());
+    }
+    if (medicoListadoDTOActualizar.direccion() != null) {
+      medico.setDireccion(medicoListadoDTOActualizar.direccion());
+    }
+
+    // Save is not necessary if the entity is already managed
+    // However, it can be added explicitly for clarity
+    // It is not necessary to call save() as the transaction will automatically save the changes.
+    // it needs @Transactional, so I can comment the next line.
+//    medicoRepository.save(medico);
   }
 
 }
