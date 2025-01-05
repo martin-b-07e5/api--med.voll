@@ -56,20 +56,12 @@ public class MedicoService {
     medicoRepository.save(medico);
   }
 
-//  public List<Medico> listarMedicos() {
-//    return medicoRepository.findAll();
-//  }
 
   public List<Medico> listarMedicos() {
-    List<Medico> medicos = medicoRepository.findAll();
-    for (Medico medico : medicos) {
-      // Verificar si la dirección se carga correctamente
-      System.out.println("Medico: " + medico);
-    }
-    return medicos;
+    return medicoRepository.findAll();
   }
 
-  /*public List<MedicoListadoDTO> listarMedicosParcial() {
+  public List<MedicoListadoDTO> listarDTO() {
     List<Medico> medicos = medicoRepository.findAll();
     // Mapea la lista de Medico a MedicoListadoDTO
 
@@ -86,9 +78,9 @@ public class MedicoService {
     return medicos.stream()
         .map(MedicoListadoDTO::new)
         .toList();
-  }*/
+  }
 
-  public Page<MedicoListadoDTO> listarMedicosParcial(Pageable pageable) {
+  public Page<MedicoListadoDTO> listarPaginado(Pageable pageable) {
     // Fetch the page of doctors from the repository. findAll(pageable) returns a page of entities (Medic)
     Page<Medico> medicosPage = medicoRepository.findAll(pageable);
 
@@ -99,6 +91,11 @@ public class MedicoService {
         medico.getDocumento(),
         medico.getEmail()
     ));
+  }
+
+  public Page<MedicoListadoDTO> listarPaginadoEquivalente(Pageable pageable) {
+    Page<Medico> medicos = medicoRepository.findAll(pageable);
+    return medicos.map(MedicoListadoDTO::new);
   }
 
 

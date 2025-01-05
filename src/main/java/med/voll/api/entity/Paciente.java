@@ -1,20 +1,20 @@
 package med.voll.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "pacientes")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Paciente {
 
@@ -24,26 +24,35 @@ public class Paciente {
   private Long idPaciente;
 
   @NotBlank
+  @JsonProperty("nombre")
   private String nombre;
 
   @NotBlank
   @Email
   @Column(unique = true)
+  @JsonProperty("email")
   private String email;
 
   @NotBlank
   @Column(unique = true)
+  @JsonProperty("documento")
   private String documento;
 
   @NotBlank
+  @JsonProperty("telefono")
   private String telefono;
 
 
   @Embedded
+  @JsonProperty("direccion")
   private Direccion direccion;
 
 
-  // Constructor to initialize a doctor from a DTO containing personal and address data.
+  // default constructor
+  public Paciente() {
+  }
+
+  // Constructor to initialize a paciente from a DTO containing personal and address data.
   public Paciente(PacienteDTO datos) {
     this.nombre = datos.nombre();
     this.email = datos.email();
@@ -51,5 +60,19 @@ public class Paciente {
     this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
   }
+
+
+  @Override
+  public String toString() {
+    return "Paciente{" +
+        "idPaciente=" + idPaciente +
+        ", nombre='" + nombre + '\'' +
+        ", email='" + email + '\'' +
+        ", documento='" + documento + '\'' +
+        ", telefono='" + telefono + '\'' +
+        ", direccion=" + direccion +
+        '}';
+  }
+
 
 }

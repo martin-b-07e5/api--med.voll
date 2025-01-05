@@ -2,7 +2,6 @@ package med.voll.api.entity;
 
 /* Consideraciones
  * nombre
- * especialidad
  * documento
  * email
 
@@ -11,13 +10,12 @@ package med.voll.api.entity;
  * paginado, máximo 10 registros x pagína
  */
 
-public record MedicoListadoDTO(
+public record PacienteListadoDTO(
     String nombre,
-    String especialidad,
     String documento,
     String email
 ) {
-  public MedicoListadoDTO(Medico medico) {
-    this(medico.getNombre(), medico.getEspecialidad().toString(), medico.getDocumento(), medico.getEmail());
+  public PacienteListadoDTO(Paciente paciente) {
+    this(paciente.getNombre(), paciente.getDocumento(), paciente.getEmail());
   }
 }

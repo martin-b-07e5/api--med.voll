@@ -1,6 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
+import med.voll.api.entity.Medico;
 import med.voll.api.entity.MedicoDTO;
 import med.voll.api.entity.MedicoListadoDTO;
 import med.voll.api.service.MedicoService;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 // In the controller, simply delegate the task to the service.
@@ -36,16 +39,41 @@ public class MedicoController {
     medicoService.registrarMedico(medicoDTO);
   }
 
+
+  //  http://localhost:8080/medicos/listar
+  @GetMapping("/listar")
+  public List<Medico> listarMedicos() {
+    return medicoService.listarMedicos();
+  }
+
+  // http://localhost:8080/medicos/listarDTO
+  @GetMapping("/listarDTO")
+  public List<MedicoListadoDTO> listarDTO() {
+    return medicoService.listarDTO();
+  }
+
+
+  // http://localhost:8080/medicos
   // http://localhost:8080/medicos?page=0&size=2&sort=nombre,asc
   @GetMapping
-  public Page<MedicoListadoDTO> listarMedicosParcial(@PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
+  public Page<MedicoListadoDTO> listarPaginado(
+      @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
 
     // Print by console (log)
     logger.info("Página solicitada: {}", pageable.getPageNumber());
     logger.info("Tamaño de página: {}", pageable.getPageSize());
     logger.info("Ordenamiento: {}", pageable.getSort());
 
-    return medicoService.listarMedicosParcial(pageable);
+    return medicoService.listarPaginado(pageable);
   }
+
+  // http://localhost:8080/medicos/equivalente
+  // http://localhost:8080/medicos/equivalente?page=0&size=2&sort=nombre,asc
+  @GetMapping("/equivalente")
+  public Page<MedicoListadoDTO> listarPaginadoEquivalente(
+      @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
+    return medicoService.listarPaginadoEquivalente(pageable);
+  }
+
 
 }

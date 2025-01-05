@@ -50,6 +50,8 @@ public class Medico {
   @JsonProperty("direccion")
   private Direccion direccion;
 
+
+  // default constructor
   public Medico() {
   }
 
@@ -64,23 +66,6 @@ public class Medico {
     this.direccion = new Direccion(datos);
   }
 
-  // getters
-//  public @NotBlank String getNombre() {
-//    return nombre;
-//  }
-
-//  public @NotNull EspecialidadEnum getEspecialidad() {
-//    return especialidad;
-//  }
-
-//  public @NotBlank String getDocumento() {
-//    return documento;
-//  }
-
-//  public @NotBlank @Email String getEmail() {
-//    return email;
-//  }
-
 
   @Override
   public String toString() {
@@ -94,4 +79,6 @@ public class Medico {
         ", direccion=" + direccion +
         '}';
   }
+
+
 }
