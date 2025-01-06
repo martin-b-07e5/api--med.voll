@@ -108,7 +108,7 @@ public class MedicoController {
   }
 
   @PostMapping // Endpoint to add a new doctor
-  public ResponseEntity<Void> addMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
+  public ResponseEntity<Medico> addMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
     // Adds the new doctor's details to the database and gets the created entity with the generated ID
     Medico medico = medicoService.addMedico(medicoDTO);
 
