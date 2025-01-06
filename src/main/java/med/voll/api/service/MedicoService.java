@@ -69,6 +69,7 @@ public class MedicoService {
 
 
   // create
+  @Transactional
   public void registrarMedico(MedicoDTO medicoDTO) {
 
     // Verify unique email
@@ -88,8 +89,10 @@ public class MedicoService {
     medicoRepository.save(medico);
   }
 
-  // update
-  public void updateMedico(MedicoUpdateDTO medicoUpdateDTO) {
+
+  // update findById
+  @Transactional
+  public void updateMedico_findById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
     Medico medico = medicoRepository.findById(medicoUpdateDTO.id())
@@ -106,11 +109,13 @@ public class MedicoService {
       medico.setDireccion(medicoUpdateDTO.direccion());
     }
 
+    // It is not necessary to call save() as the transaction will automatically save the changes.
     medicoRepository.save(medico);
   }
 
+  // update getReferenceById
   @Transactional
-  public void updateMedico2(MedicoUpdateDTO medicoUpdateDTO) {
+  public void updateMedico_getReferenceById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
     Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.id());
@@ -126,15 +131,13 @@ public class MedicoService {
       medico.setDireccion(medicoUpdateDTO.direccion());
     }
 
-    /* // Save is not necessary if the entity is already managed
-    // However, it can be added explicitly for clarity
     // It is not necessary to call save() as the transaction will automatically save the changes.
-    // it needs @Transactional, so I can comment the next line.
-    medicoRepository.save(medico);*/
-
+//    medicoRepository.save(medico);
   }
 
+
   // delete
+  @Transactional
   public void eliminarMedicoHard(Long id) {
     Medico medico = medicoRepository.getReferenceById(id);
     medicoRepository.delete(medico);
@@ -152,14 +155,14 @@ public class MedicoService {
 //    medico.setInactivo(medicoExclusionDTO.inactivo());
 //  }
 
-  public void excluirMedico(Long id) {
+  public void excluirMedicoPojo(Long id) {
     var medico = medicoRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("Médico no encontrado"));
     medico.setInactivo(true); // Marca al médico como inactivo
     medicoRepository.save(medico); // Guarda los cambios en la base de datos
   }
 
-  public void excluirMedico2(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+  public void excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
     Medico medico = medicoRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
     medico.setInactivo(medicoExclusionDTO.inactivo());
@@ -176,7 +179,7 @@ public class MedicoService {
 
   // retorna DTOs
   @Transactional(readOnly = true)
-  public List<MedicoListadoSimpleDTO> listarMedicosInactivosSimple() {
+  public List<MedicoListadoSimpleDTO> listarMedicosInctivosDTO() {
     return medicoRepository.findByInactivoTrue()
         .stream()
         .map(MedicoListadoSimpleDTO::new)

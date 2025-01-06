@@ -72,7 +72,7 @@ public class MedicoController {
   // update
   @PutMapping
   public void actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
-    medicoService.updateMedico2(medicoUpdateDTO);
+    medicoService.updateMedico_getReferenceById(medicoUpdateDTO);
   }
 
   // delete
@@ -83,19 +83,16 @@ public class MedicoController {
   }
 
   // excluir
-  // http://localhost:8080/medicos/36/excluir
-//  @PutMapping("/{id}/excluir")
-//  public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-//    medicoService.excluirMedico(id, medicoExclusionDTO);
-//  }
-  @PatchMapping("/{id}/excluir")
-  public void excluirMedico(@PathVariable Long id) {
-    medicoService.excluirMedico(id);
+  // http://localhost:8080/medicos/39/excluirPojo
+  @PatchMapping("/{id}/excluirPojo")
+  public void excluirMedicoPojo(@PathVariable Long id) {
+    medicoService.excluirMedicoPojo(id);
   }
 
+  // http://localhost:8080/medicos/39/excluirDTO
   @PatchMapping("/{id}/excluirDTO")
-  public void excluirMedico2(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-    medicoService.excluirMedico2(id, medicoExclusionDTO);
+  public void excluirDTO(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
+    medicoService.excluirMedicoDTO(id, medicoExclusionDTO);
   }
 
 
@@ -109,8 +106,8 @@ public class MedicoController {
   // devuelve DTOs
   //  http://localhost:8080/medicos/inactivosSimple
   @GetMapping("/inactivosSimple")
-  public List<MedicoListadoSimpleDTO> listarMedicosInctivosSimple() {
-    return medicoService.listarMedicosInactivosSimple();
+  public List<MedicoListadoSimpleDTO> listarMedicosInctivosDTO() {
+    return medicoService.listarMedicosInctivosDTO();
   }
 
 
