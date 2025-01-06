@@ -75,14 +75,14 @@ public class MedicoController {
     medicoService.updateMedico_getReferenceById(medicoUpdateDTO);
   }
 
-  // delete
+  // delete en DB
   // http://localhost:8080/medicos/36
   @DeleteMapping("/{id}")
   public void eliminarMedicoHard(@PathVariable Long id) {
     medicoService.eliminarMedicoHard(id);
   }
 
-  // excluir
+  // excluir (delete lógico)
   // http://localhost:8080/medicos/39/excluirPojo
   @PatchMapping("/{id}/excluirPojo")
   public void excluirMedicoPojo(@PathVariable Long id) {
@@ -108,6 +108,14 @@ public class MedicoController {
   @GetMapping("/inactivosSimple")
   public List<MedicoListadoSimpleDTO> listarMedicosInctivosDTO() {
     return medicoService.listarMedicosInctivosDTO();
+  }
+
+
+  // http://localhost:8080/medicos/listarPorEstado?inactivo=true
+  // http://localhost:8080/medicos/listarPorEstado?inactivo=false
+  @GetMapping("/listarPorEstado")
+  public List<MedicoListadoSimpleDTO> listarMedicosPorEstado(@RequestParam boolean inactivo) {
+    return medicoService.listarMedicosPorEstado(inactivo);
   }
 
 

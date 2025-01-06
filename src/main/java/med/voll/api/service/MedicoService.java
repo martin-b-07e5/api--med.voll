@@ -186,5 +186,13 @@ public class MedicoService {
         .toList();
   }
 
+  @Transactional(readOnly = true)
+  public List<MedicoListadoSimpleDTO> listarMedicosPorEstado(boolean inactivo) {
+    return medicoRepository.findByInactivo(inactivo)
+        .stream()
+        .map(MedicoListadoSimpleDTO::new)
+        .toList();
+  }
+
 
 }

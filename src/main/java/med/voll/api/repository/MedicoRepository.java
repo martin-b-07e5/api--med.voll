@@ -18,4 +18,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
   List<Medico> findByInactivoFalse();
 
+  List<Medico> findByInactivo(boolean inactivo);
+
 }
