@@ -82,6 +82,7 @@ public class MedicoController {
     medicoService.eliminarMedicoHard(id);
   }
 
+  // excluir
   // http://localhost:8080/medicos/36/excluir
   @PutMapping("/{id}/excluir")
   public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {

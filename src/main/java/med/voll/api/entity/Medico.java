@@ -66,7 +66,7 @@ public class Medico {
     this.especialidad = datos.especialidad();
     this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
-    this.inactivo = datos.inactivo();
+    this.inactivo = datos.inactivo(); // this.inactivo = false
   }
 
 
