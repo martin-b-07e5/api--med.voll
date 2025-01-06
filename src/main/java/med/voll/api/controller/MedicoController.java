@@ -104,10 +104,16 @@ public class MedicoController {
   }
 
   // devuelve DTOs
-  //  http://localhost:8080/medicos/inactivosSimple
+  // http://localhost:8080/medicos/inactivosSimple
   @GetMapping("/inactivosSimple")
-  public List<MedicoListadoSimpleDTO> listarMedicosInctivosDTO() {
-    return medicoService.listarMedicosInctivosDTO();
+  public List<MedicoListadoSimpleDTO> listarMedicosInactivosDTO() {
+    return medicoService.listarMedicosInactivosDTO();
+  }
+
+  // http://localhost:8080/medicos/activosSimple
+  @GetMapping("/activosSimple")
+  public List<MedicoListadoSimpleDTO> listarMedicosActivosDTO() {
+    return medicoService.listarMedicosActivosDTO();
   }
 
 

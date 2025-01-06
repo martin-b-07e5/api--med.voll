@@ -179,12 +179,21 @@ public class MedicoService {
 
   // retorna DTOs
   @Transactional(readOnly = true)
-  public List<MedicoListadoSimpleDTO> listarMedicosInctivosDTO() {
+  public List<MedicoListadoSimpleDTO> listarMedicosInactivosDTO() {
     return medicoRepository.findByInactivoTrue()
         .stream()
         .map(MedicoListadoSimpleDTO::new)
         .toList();
   }
+
+  @Transactional(readOnly = true)
+  public List<MedicoListadoSimpleDTO> listarMedicosActivosDTO() {
+    return medicoRepository.findByInactivoFalse()
+        .stream()
+        .map(MedicoListadoSimpleDTO::new)
+        .toList();
+  }
+
 
   @Transactional(readOnly = true)
   public List<MedicoListadoSimpleDTO> listarMedicosPorEstado(boolean inactivo) {
