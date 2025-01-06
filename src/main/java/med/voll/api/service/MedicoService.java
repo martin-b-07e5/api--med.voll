@@ -159,6 +159,14 @@ public class MedicoService {
     medicoRepository.save(medico); // Guarda los cambios en la base de datos
   }
 
+  public void excluirMedico2(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+    Medico medico = medicoRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+    medico.setInactivo(medicoExclusionDTO.inactivo());
+    medicoRepository.save(medico);
+  }
+
+
   //------------------------------------
   // retorna entidades
   @Transactional(readOnly = true)

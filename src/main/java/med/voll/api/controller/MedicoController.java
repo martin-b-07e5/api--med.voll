@@ -93,6 +93,11 @@ public class MedicoController {
     medicoService.excluirMedico(id);
   }
 
+  @PatchMapping("/{id}/excluirDTO")
+  public void excluirMedico2(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
+    medicoService.excluirMedico2(id, medicoExclusionDTO);
+  }
+
 
   // devuelve entidades
   //  http://localhost:8080/medicos/inactivos
