@@ -140,16 +140,23 @@ public class MedicoService {
     medicoRepository.delete(medico);
   }
 
-  @Transactional
-  public void excluirMedico(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+//  @Transactional
+//  public void excluirMedico(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+//
+//    // Check if the medico exists before trying to exclude it
+//    if (!medicoRepository.existsById(id)) {
+//      throw new EntityNotFoundException("Médico con ID " + id + " no encontrado.");
+//    }
+//
+//    Medico medico = medicoRepository.getReferenceById(id);
+//    medico.setInactivo(medicoExclusionDTO.inactivo());
+//  }
 
-    // Check if the medico exists before trying to exclude it
-    if (!medicoRepository.existsById(id)) {
-      throw new EntityNotFoundException("Médico con ID " + id + " no encontrado.");
-    }
-
-    Medico medico = medicoRepository.getReferenceById(id);
-    medico.setInactivo(medicoExclusionDTO.inactivo());
+  public void excluirMedico(Long id) {
+    var medico = medicoRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("Médico no encontrado"));
+    medico.setInactivo(true); // Marca al médico como inactivo
+    medicoRepository.save(medico); // Guarda los cambios en la base de datos
   }
 
   //------------------------------------

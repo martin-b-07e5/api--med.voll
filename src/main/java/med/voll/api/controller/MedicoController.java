@@ -84,10 +84,15 @@ public class MedicoController {
 
   // excluir
   // http://localhost:8080/medicos/36/excluir
-  @PutMapping("/{id}/excluir")
-  public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-    medicoService.excluirMedico(id, medicoExclusionDTO);
+//  @PutMapping("/{id}/excluir")
+//  public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
+//    medicoService.excluirMedico(id, medicoExclusionDTO);
+//  }
+  @PatchMapping("/{id}/excluir")
+  public void excluirMedico(@PathVariable Long id) {
+    medicoService.excluirMedico(id);
   }
+
 
   // devuelve entidades
   //  http://localhost:8080/medicos/inactivos
