@@ -70,7 +70,7 @@ public class MedicoService {
 
   // create
   @Transactional
-  public void addMedico(MedicoDTO medicoDTO) {
+  public Medico addMedico(MedicoDTO medicoDTO) {
 
     // Verify unique email
     if (medicoRepository.existsByEmail(medicoDTO.email())) {
@@ -87,6 +87,7 @@ public class MedicoService {
 
     // If the DTO is valid, it is saved in the database.
     medicoRepository.save(medico);
+    return medico;
   }
 
   @Transactional(readOnly = true)

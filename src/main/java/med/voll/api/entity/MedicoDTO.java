@@ -38,4 +38,17 @@ public record MedicoDTO(
     Boolean inactivo
 ) {
 
+  // Constructor to map Medico entity to MedicoDTO
+  public MedicoDTO(Medico medico) {
+    this(
+        medico.getNombre(),
+        medico.getEmail(),
+        medico.getDocumento(),
+        medico.getEspecialidad(),
+        medico.getTelefono(),
+        new DireccionDTO(medico.getDireccion()),  // Assuming DireccionDTO has a constructor for Direccion
+        medico.getInactivo()
+    );
+  }
+
 }

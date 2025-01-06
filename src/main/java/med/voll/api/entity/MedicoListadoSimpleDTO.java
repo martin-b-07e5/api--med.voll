@@ -6,7 +6,8 @@ public record MedicoListadoSimpleDTO(
     String nombre,
     Boolean inactivo
 ) {
-  // constructor
+
+  // Constructor to map Medico entity to MedicoListadoSimpleDTO
   public MedicoListadoSimpleDTO(Medico medico) {
     this(medico.getId(), medico.getNombre(), medico.getInactivo());
   }

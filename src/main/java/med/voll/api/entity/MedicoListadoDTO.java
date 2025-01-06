@@ -8,7 +8,8 @@ public record MedicoListadoDTO(
     String email,
     Boolean inactivo
 ) {
-  // constructor
+
+  // constructor to map Medico entity to MedicoListadoDTO
   public MedicoListadoDTO(Medico medico) {
     this(medico.getId(), medico.getNombre(), medico.getEspecialidad().toString(), medico.getDocumento(),
         medico.getEmail(), medico.getInactivo());

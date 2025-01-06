@@ -10,10 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 // In the controller, simply delegate the task to the service.
@@ -73,8 +74,26 @@ public class MedicoController {
 
   @PostMapping // Endpoint to add a new doctor
   public ResponseEntity<Void> addMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
-    medicoService.addMedico(medicoDTO); // Adds the new doctor's details to the database
-    return ResponseEntity.status(HttpStatus.CREATED).build(); // Returns a 201 Created status
+    // Adds the new doctor's details to the database and gets the created entity with the generated ID
+    Medico medico = medicoService.addMedico(medicoDTO); // Assuming your service returns the created Medico entity with ID
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(medico.getId())  // Builds the URL with the generated ID
+        .toUri();
+
+    return ResponseEntity.created(location).build(); // Returns a 201 Created status with the location URL
+  }
+
+
+  @GetMapping("/{id}")  // Endpoint to get a doctor's details by ID
+  public ResponseEntity<MedicoDTO> getMedicoById(@PathVariable Long id) {
+    Medico medico = medicoService.getMedicoById(id);  // Fetch the doctor from the service
+    if (medico != null) {
+      MedicoDTO medicoDTO = new MedicoDTO(medico);  // Map the entity to DTO
+      return ResponseEntity.ok(medicoDTO);  // Return the doctor's details in the response
+    } else {
+      return ResponseEntity.notFound().build();  // Return 404 if the doctor is not found
+    }
   }
 
 
