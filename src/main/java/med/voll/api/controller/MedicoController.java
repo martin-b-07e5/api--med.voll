@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,16 +64,23 @@ public class MedicoController {
     return medicoService.listarPaginadoEquivalente(pageable);
   }
 
-
+  //  ----------------------------------------------------------------------
   // create
-  @PostMapping
+  @PostMapping("/old")
   public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
-    medicoService.registrarMedico(medicoDTO);
+    medicoService.addMedico(medicoDTO);
   }
 
+  @PostMapping // Endpoint to add a new doctor
+  public ResponseEntity<Void> addMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
+    medicoService.addMedico(medicoDTO); // Adds the new doctor's details to the database
+    return ResponseEntity.status(HttpStatus.CREATED).build(); // Returns a 201 Created status
+  }
+
+
+  //  ----------------------------------------------------------------------
   // update
-//  ----------------------------------------------------------------------
-  @PutMapping  // Endpoint to update a doctor's information
+  @PutMapping("/old")  // Endpoint to update a doctor's information
   public ResponseEntity actualizarMedicoSimple(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
     medicoService.updateMedico_getReferenceById(medicoUpdateDTO);  // Updates the doctor's details in the database
     return ResponseEntity.ok(medicoUpdateDTO);  // Returns the updated doctor data in the response

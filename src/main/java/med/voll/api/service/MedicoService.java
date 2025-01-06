@@ -70,7 +70,7 @@ public class MedicoService {
 
   // create
   @Transactional
-  public void registrarMedico(MedicoDTO medicoDTO) {
+  public void addMedico(MedicoDTO medicoDTO) {
 
     // Verify unique email
     if (medicoRepository.existsByEmail(medicoDTO.email())) {
@@ -118,6 +118,29 @@ public class MedicoService {
     // It is not necessary to call save() as the transaction will automatically save the changes.
     medicoRepository.save(medico);
   }
+
+
+  // old
+  /*@Transactional
+  public void updateMedico_getReferenceByIdOld(MedicoUpdateDTO medicoUpdateDTO) {
+
+    // Get the medico from the DB
+    Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.id());
+
+    // Update only allowed fields
+    if (medicoUpdateDTO.nombre() != null) {
+      medico.setNombre(medicoUpdateDTO.nombre());
+    }
+    if (medicoUpdateDTO.documento() != null) {
+      medico.setDocumento(medicoUpdateDTO.documento());
+    }
+    if (medicoUpdateDTO.direccion() != null) {
+      medico.setDireccion(medicoUpdateDTO.direccion());
+    }
+
+    // It is not necessary to call save() as the transaction will automatically save the changes.
+//    medicoRepository.save(medico);
+  }*/
 
   // update getReferenceById
   @Transactional
