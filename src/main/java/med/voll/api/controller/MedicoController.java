@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,8 +79,9 @@ public class MedicoController {
   // delete en DB
   // http://localhost:8080/medicos/36
   @DeleteMapping("/{id}")
-  public void eliminarMedicoHard(@PathVariable Long id) {
+  public ResponseEntity eliminarMedicoHard(@PathVariable Long id) {
     medicoService.eliminarMedicoHard(id);
+    return ResponseEntity.noContent().build();
   }
 
   // excluir (delete lógico)
