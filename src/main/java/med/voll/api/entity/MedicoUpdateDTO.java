@@ -9,4 +9,7 @@ public record MedicoUpdateDTO(
     String documento,
     @Valid Direccion direccion
 ) {
+  public MedicoUpdateDTO(Medico medico) {
+    this(medico.getId(), medico.getNombre(), medico.getDocumento(), medico.getDireccion());
+  }
 }

@@ -71,10 +71,21 @@ public class MedicoController {
   }
 
   // update
-  @PutMapping
-  public void actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
-    medicoService.updateMedico_getReferenceById(medicoUpdateDTO);
+//  ----------------------------------------------------------------------
+  @PutMapping  // Endpoint to update a doctor's information
+  public ResponseEntity actualizarMedicoSimple(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
+    medicoService.updateMedico_getReferenceById(medicoUpdateDTO);  // Updates the doctor's details in the database
+    return ResponseEntity.ok(medicoUpdateDTO);  // Returns the updated doctor data in the response
   }
+
+  @PutMapping  // Endpoint to update a doctor's information
+  public ResponseEntity actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
+    medicoService.updateMedico_getReferenceById(medicoUpdateDTO);  // Updates the doctor's details in the database
+    Medico medicoActualizado = medicoService.getMedicoById(medicoUpdateDTO.id()); // Fetches the updated doctor from the database
+    return ResponseEntity.ok(new MedicoUpdateDTO(medicoActualizado));  // Returns the updated doctor data in the response
+  }
+//  ----------------------------------------------------------------------
+
 
   // delete en DB
   // http://localhost:8080/medicos/36

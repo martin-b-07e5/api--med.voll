@@ -89,6 +89,12 @@ public class MedicoService {
     medicoRepository.save(medico);
   }
 
+  @Transactional(readOnly = true)
+  public Medico getMedicoById(Long id) {
+    return medicoRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + id));
+  }
+
 
   // update findById
   @Transactional
