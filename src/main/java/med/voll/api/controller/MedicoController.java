@@ -110,10 +110,13 @@ public class MedicoController {
     return medicoService.listarMedicosInactivosDTO();
   }
 
-  // http://localhost:8080/medicos/activosSimple
+  //  http://localhost:8080/medicos/activosSimple?page=0&size=3&sort=id,asc
+  //  http://localhost:8080/medicos/activosSimple?page=0&size=3&sort=id,desc
   @GetMapping("/activosSimple")
-  public List<MedicoListadoSimpleDTO> listarMedicosActivosDTO() {
-    return medicoService.listarMedicosActivosDTO();
+  public Page<MedicoListadoSimpleDTO> listarMedicosActivosDTO(
+      @PageableDefault(size = 2, sort = "id") Pageable page
+  ) {
+    return medicoService.listarMedicosActivosDTO(page);
   }
 
 

@@ -186,12 +186,12 @@ public class MedicoService {
         .toList();
   }
 
+  // return DTOs paginados
   @Transactional(readOnly = true)
-  public List<MedicoListadoSimpleDTO> listarMedicosActivosDTO() {
-    return medicoRepository.findByInactivoFalse()
-        .stream()
-        .map(MedicoListadoSimpleDTO::new)
-        .toList();
+  public Page<MedicoListadoSimpleDTO> listarMedicosActivosDTO(Pageable page) {
+    Page<Medico> medicosPage = medicoRepository.findByInactivoFalse(page);
+    return medicosPage
+        .map(MedicoListadoSimpleDTO::new);
   }
 
 
