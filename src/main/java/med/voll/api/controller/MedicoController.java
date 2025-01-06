@@ -130,7 +130,7 @@ public class MedicoController {
   }
 
   @PutMapping  // Endpoint to update a doctor's information
-  public ResponseEntity actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
+  public ResponseEntity<MedicoUpdateDTO> actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
     medicoService.updateMedico_getReferenceById(medicoUpdateDTO);  // Updates the doctor's details in the database
     Medico medicoActualizado = medicoService.getMedicoById(medicoUpdateDTO.id()); // Fetches the updated doctor from the database
     return ResponseEntity.ok(new MedicoUpdateDTO(medicoActualizado));  // Returns the updated doctor data in the response
