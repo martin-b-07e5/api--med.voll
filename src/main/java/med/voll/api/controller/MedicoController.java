@@ -2,7 +2,6 @@ package med.voll.api.controller;
 
 import jakarta.validation.Valid;
 import med.voll.api.entity.*;
-import med.voll.api.repository.MedicoRepository;
 import med.voll.api.service.MedicoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +24,6 @@ public class MedicoController {
 
   @Autowired
   private MedicoService medicoService;
-
-//  @Autowired
-//  private MedicoRepository medicoRepository;
 
 
   // read
@@ -79,19 +75,32 @@ public class MedicoController {
     medicoService.updateMedico2(medicoUpdateDTO);
   }
 
+  // delete
+  // http://localhost:8080/medicos/36
   @DeleteMapping("/{id}")
   public void eliminarMedicoHard(@PathVariable Long id) {
     medicoService.eliminarMedicoHard(id);
   }
 
+  // http://localhost:8080/medicos/36/excluir
   @PutMapping("/{id}/excluir")
   public void excluirMedico(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
     medicoService.excluirMedico(id, medicoExclusionDTO);
   }
 
-  @GetMapping("/activos")
-  public List<Medico> listarMedicosActivos() {
-    return medicoService.listarMedicosActivos();
+  // devuelve entidades
+  //  http://localhost:8080/medicos/inactivos
+  @GetMapping("/inactivos")
+  public List<Medico> listarMedicosInactivosEntidades() {
+    return medicoService.listarMedicosInactivosEntidades();
   }
+
+  // devuelve DTOs
+  //  http://localhost:8080/medicos/inactivosSimple
+  @GetMapping("/inactivosSimple")
+  public List<MedicoListadoSimpleDTO> listarMedicosInctivosSimple() {
+    return medicoService.listarMedicosInactivosSimple();
+  }
+
 
 }

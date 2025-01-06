@@ -59,13 +59,7 @@ public class MedicoService {
     Page<Medico> medicosPage = medicoRepository.findAll(pageable);
 
     // Map the doctors page to a DTOs page
-    return medicosPage.map(medico -> new MedicoListadoDTO(
-        medico.getId(),
-        medico.getNombre(),
-        medico.getEspecialidad().toString(),
-        medico.getDocumento(),
-        medico.getEmail()
-    ));
+    return medicosPage.map(MedicoListadoDTO::new);
   }
 
   public Page<MedicoListadoDTO> listarPaginadoEquivalente(Pageable pageable) {
@@ -148,13 +142,30 @@ public class MedicoService {
 
   @Transactional
   public void excluirMedico(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+
+    // Check if the medico exists before trying to exclude it
+    if (!medicoRepository.existsById(id)) {
+      throw new EntityNotFoundException("Médico con ID " + id + " no encontrado.");
+    }
+
     Medico medico = medicoRepository.getReferenceById(id);
-    medico.setActivo(medicoExclusionDTO.activo()); // Actualiza el campo 'activo'
+    medico.setInactivo(medicoExclusionDTO.inactivo());
   }
 
+  //------------------------------------
+  // retorna entidades
   @Transactional(readOnly = true)
-  public List<Medico> listarMedicosActivos() {
-    return medicoRepository.findByActivoTrue();
+  public List<Medico> listarMedicosInactivosEntidades() {
+    return medicoRepository.findByInactivoTrue();
+  }
+
+  // retorna DTOs
+  @Transactional(readOnly = true)
+  public List<MedicoListadoSimpleDTO> listarMedicosInactivosSimple() {
+    return medicoRepository.findByInactivoTrue()
+        .stream()
+        .map(MedicoListadoSimpleDTO::new)
+        .toList();
   }
 
 

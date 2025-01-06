@@ -49,8 +49,9 @@ public class Medico {
   @JsonProperty("direccion")
   private Direccion direccion;
 
-  @Column(nullable = false)
-  private boolean activo = true;
+  //  @Column(nullable = false)
+  @Column
+  private Boolean inactivo;
 
 
   // default constructor
@@ -65,19 +66,15 @@ public class Medico {
     this.especialidad = datos.especialidad();
     this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
+    this.inactivo = datos.inactivo();
   }
 
 
   @Override
   public String toString() {
     return "Medico{" +
-        "idMedico=" + id +
         ", nombre='" + nombre + '\'' +
         ", email='" + email + '\'' +
-        ", documento='" + documento + '\'' +
-        ", especialidad=" + especialidad +
-        ", telefono='" + telefono + '\'' +
-        ", direccion=" + direccion +
         '}';
   }
 

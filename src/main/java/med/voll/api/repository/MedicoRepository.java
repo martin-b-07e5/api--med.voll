@@ -14,6 +14,8 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
   boolean existsById(Long id);
 
-  List<Medico> findByActivoTrue();
+  List<Medico> findByInactivoTrue();
+
+  List<Medico> findByInactivoFalse();
 
 }

@@ -32,7 +32,10 @@ public record MedicoDTO(
 
     @NotNull
     @Valid
-    DireccionDTO direccion
+    DireccionDTO direccion,
+
+    @NotNull
+    Boolean inactivo
 ) {
 
 }
