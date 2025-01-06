@@ -117,7 +117,7 @@ public class MedicoController {
         .buildAndExpand(medico.getId())  // Builds the URL with the generated ID
         .toUri();
 
-    return ResponseEntity.created(location).build(); // Returns a 201 Created status with the location URL
+    return ResponseEntity.created(location).body(medico);
   }
 
 
