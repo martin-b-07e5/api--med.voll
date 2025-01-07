@@ -110,7 +110,7 @@ public class MedicoController {
 
   @PostMapping // Endpoint to add a new doctor
   public ResponseEntity<Medico> addMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
-    // Adds the new doctor's details to the database and gets the created entity with the generated ID
+    // Adds the new doctor's details to the database and gets the created entity with the generated ID.
     Medico medico = medicoService.addMedico(medicoDTO);
 
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -146,8 +146,9 @@ public class MedicoController {
 
   @PatchMapping("/{id}/excluirDTO")
   // http://localhost:8080/medicos/39/excluirDTO
-  public void excluirDTO(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-    medicoService.excluirMedicoDTO(id, medicoExclusionDTO);
+  public ResponseEntity<String> excluirDTO(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
+    String message = medicoService.excluirMedicoDTO(id, medicoExclusionDTO);
+    return ResponseEntity.ok(message);  // Returns a confirmation message in the response
   }
 
 
@@ -155,7 +156,7 @@ public class MedicoController {
 
   @DeleteMapping("/{id}")
   // http://localhost:8080/medicos/36
-  public ResponseEntity eliminarMedicoHard(@PathVariable Long id) {
+  public ResponseEntity<Void> eliminarMedicoHard(@PathVariable Long id) {
     medicoService.eliminarMedicoHard(id);
     return ResponseEntity.noContent().build();
   }

@@ -156,11 +156,18 @@ public class MedicoService {
     return "Médico con ID " + id + " marcado como inactivo correctamente.";
   }
 
-  public void excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+  public String excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
     Medico medico = medicoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Médico no encontrado"));
+        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado"));
+
+    if (medico.getInactivo()) {
+      throw new IllegalStateException("El médico ya está marcado como inactivo");
+    }
+
     medico.setInactivo(medicoExclusionDTO.inactivo());
     medicoRepository.save(medico);
+
+    return "Médico con ID " + id + " marcado como inactivo correctamente.";
   }
 
 
