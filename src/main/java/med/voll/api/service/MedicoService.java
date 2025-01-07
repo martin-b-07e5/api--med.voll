@@ -1,7 +1,6 @@
 package med.voll.api.service;
 
 import jakarta.persistence.EntityNotFoundException;
-//import jakarta.transaction.Transactional;
 import med.voll.api.exception.MedicoNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import med.voll.api.controller.MedicoController;
@@ -39,17 +38,6 @@ public class MedicoService {
   public List<MedicoListadoDTO> listarDTO() {
     List<Medico> medicos = medicoRepository.findAll();
     // Mapea la lista de Medico a MedicoListadoDTO
-
-//    List<MedicoListadoDTO> medicoListadoDTOS = medicos.stream()
-//        .map(medico -> new MedicoListadoDTO(
-//            medico.getNombre(),
-//            medico.getEspecialidad().toString(),
-//            medico.getDocumento(),
-//            medico.getEmail()
-//        ))
-//        .collect(Collectors.toList());
-//    return medicoListadoDTOS;
-
     return medicos.stream()
         .map(MedicoListadoDTO::new)
         .toList();
@@ -121,29 +109,6 @@ public class MedicoService {
     medicoRepository.save(medico);
   }
 
-
-  // old
-  /*@Transactional
-  public void updateMedico_getReferenceByIdOld(MedicoUpdateDTO medicoUpdateDTO) {
-
-    // Get the medico from the DB
-    Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.id());
-
-    // Update only allowed fields
-    if (medicoUpdateDTO.nombre() != null) {
-      medico.setNombre(medicoUpdateDTO.nombre());
-    }
-    if (medicoUpdateDTO.documento() != null) {
-      medico.setDocumento(medicoUpdateDTO.documento());
-    }
-    if (medicoUpdateDTO.direccion() != null) {
-      medico.setDireccion(medicoUpdateDTO.direccion());
-    }
-
-    // It is not necessary to call save() as the transaction will automatically save the changes.
-//    medicoRepository.save(medico);
-  }*/
-
   // update getReferenceById
   @Transactional
   public void updateMedico_getReferenceById(MedicoUpdateDTO medicoUpdateDTO) {
@@ -177,23 +142,18 @@ public class MedicoService {
     medicoRepository.deleteById(id);
   }
 
-//  @Transactional
-//  public void excluirMedico(Long id, MedicoExclusionDTO medicoExclusionDTO) {
-//
-//    // Check if the medico exists before trying to exclude it
-//    if (!medicoRepository.existsById(id)) {
-//      throw new EntityNotFoundException("Médico con ID " + id + " no encontrado.");
-//    }
-//
-//    Medico medico = medicoRepository.getReferenceById(id);
-//    medico.setInactivo(medicoExclusionDTO.inactivo());
-//  }
+  public String excluirMedicoPojo(Long id) {
+    Medico medico = medicoRepository.findById(id)
+        .orElseThrow(() -> new MedicoNotFoundException(id));  // Custom exception
 
-  public void excluirMedicoPojo(Long id) {
-    var medico = medicoRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("Médico no encontrado"));
-    medico.setInactivo(true); // Marca al médico como inactivo
-    medicoRepository.save(medico); // Guarda los cambios en la base de datos
+    if (medico.getInactivo()) {
+      throw new IllegalStateException("El médico ya está marcado como inactivo");
+    }
+
+    medico.setInactivo(true); // Mark the doctor as inactive
+    medicoRepository.save(medico); // Save changes to the database
+
+    return "Médico con ID " + id + " marcado como inactivo correctamente.";
   }
 
   public void excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {

@@ -139,8 +139,9 @@ public class MedicoController {
 
   @PatchMapping("/{id}/excluirPojo")
   // http://localhost:8080/medicos/39/excluirPojo
-  public void excluirMedicoPojo(@PathVariable Long id) {
-    medicoService.excluirMedicoPojo(id);
+  public ResponseEntity<String> excluirMedicoPojo(@PathVariable Long id) {
+    String message = medicoService.excluirMedicoPojo(id);
+    return ResponseEntity.ok(message);  // Returns a confirmation message in the response
   }
 
   @PatchMapping("/{id}/excluirDTO")

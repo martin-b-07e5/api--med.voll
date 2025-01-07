@@ -22,4 +22,16 @@ public class GlobalExceptionHandler {
         "path", "/medicos/{id}" // Puedes ajustar dinámicamente el path si lo necesitas
     );
   }
+
+  @ExceptionHandler(IllegalStateException.class)
+  public Map<String, Object> handleIllegalStateException(IllegalStateException ex) {
+    return Map.of(
+        "timestamp", LocalDateTime.now(),
+        "status", HttpStatus.CONFLICT.value(),
+        "error", "Conflict",
+        "message", ex.getMessage(),
+        "path", "/medicos/{id}" // Ajustar dinámicamente si es necesario
+    );
+  }
+
 }
