@@ -2,6 +2,7 @@ package med.voll.api.controller;
 
 import jakarta.validation.Valid;
 import med.voll.api.entity.*;
+import med.voll.api.exception.MedicoNotFoundException;
 import med.voll.api.service.MedicoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,7 +31,7 @@ public class MedicoController {
   private MedicoService medicoService;
 
 
-  ///  read ----------------------------------------------------------------------
+  ///  read -------------------------------------------------------------------
 
   @GetMapping("/listar")
   //  http://localhost:8080/medicos/listar
@@ -101,7 +103,7 @@ public class MedicoController {
   }
 
 
-  ///  create ----------------------------------------------------------------------
+  ///  create -----------------------------------------------------------------
 
   @PostMapping("/old")
   public void agregarMedico(@RequestBody @Valid MedicoDTO medicoDTO) {
@@ -122,7 +124,7 @@ public class MedicoController {
   }
 
 
-  ///  update ----------------------------------------------------------------------
+  /// update ------------------------------------------------------------------
 
   @PutMapping("/old")  // Endpoint to update a doctor's information
   public ResponseEntity actualizarMedicoSimple(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
@@ -145,20 +147,44 @@ public class MedicoController {
   }
 
   @PatchMapping("/{id}/excluirDTO")
-  // http://localhost:8080/medicos/39/excluirDTO
   public ResponseEntity<String> excluirDTO(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-    String message = medicoService.excluirMedicoDTO(id, medicoExclusionDTO);
-    return ResponseEntity.ok(message);  // Returns a confirmation message in the response
+    Medico medico = medicoService.getMedicoById(id); // Obtener el médico por id
+
+    // Si el médico ya está en el estado deseado, solo hacemos un return
+    if (medico.getInactivo() == medicoExclusionDTO.inactivo()) {
+      throw new IllegalStateException(medicoExclusionDTO.inactivo()
+          ? "El médico ya está marcado como inactivo"
+          : "El médico ya está marcado como activo");
+    }
+
+    // Si el médico no está en el estado deseado, proceder con la lógica de cambio
+    medicoService.excluirMedicoDTO(id, medicoExclusionDTO);
+
+    // Mensaje diferente dependiendo del estado de "inactivo"
+    String mensaje = medicoExclusionDTO.inactivo()
+        ? "Médico excluido correctamente"
+        : "Médico activado correctamente";
+
+    return ResponseEntity.ok(mensaje);
   }
 
 
-  ///  delete ----------------------------------------------------------------------
+  /// delete ------------------------------------------------------------------
 
   @DeleteMapping("/{id}")
-  // http://localhost:8080/medicos/36
-  public ResponseEntity<Void> eliminarMedicoHard(@PathVariable Long id) {
-    medicoService.eliminarMedicoHard(id);
-    return ResponseEntity.noContent().build();
+  // http://localhost:8080/medicos/57
+  public ResponseEntity<String> eliminarMedicoHard(@PathVariable Long id) {
+    try {
+      String message = medicoService.eliminarMedicoHard(id);  // Service call and message capture
+      return ResponseEntity.status(HttpStatus.OK).body(message);  // Returns a message with a 200 OK
+    } catch (MedicoNotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("Médico with ID " + id + " not found.");
+    } catch (Exception e) {
+      // General error
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("An error occurred while trying to delete the physician.");
+    }
   }
 
 

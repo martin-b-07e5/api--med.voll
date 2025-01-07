@@ -30,7 +30,8 @@ public class MedicoService {
   MedicoValidatorMapper medicoValidatorMapper;
 
 
-  // read
+  /// read --------------------------------------------------------------------
+
   public List<Medico> listarMedicos() {
     return medicoRepository.findAll();
   }
@@ -56,8 +57,45 @@ public class MedicoService {
     return medicos.map(MedicoListadoDTO::new);
   }
 
+  @Transactional(readOnly = true)
+  // retorna entidades
+  public List<Medico> listarMedicosInactivosEntidades() {
+    return medicoRepository.findByInactivoTrue();
+  }
 
-  // create
+  @Transactional(readOnly = true)
+  // retorna DTOs
+  public List<MedicoListadoSimpleDTO> listarMedicosInactivosDTO() {
+    return medicoRepository.findByInactivoTrue()
+        .stream()
+        .map(MedicoListadoSimpleDTO::new)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  // return DTOs paginados
+  public Page<MedicoListadoSimpleDTO> listarMedicosActivosDTO(Pageable page) {
+    Page<Medico> medicosPage = medicoRepository.findByInactivoFalse(page);
+    return medicosPage
+        .map(MedicoListadoSimpleDTO::new);
+  }
+
+  @Transactional(readOnly = true)
+  public List<MedicoListadoSimpleDTO> listarMedicosPorEstado(boolean inactivo) {
+    return medicoRepository.findByInactivo(inactivo)
+        .stream()
+        .map(MedicoListadoSimpleDTO::new)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public Medico getMedicoById(Long id) {
+    return medicoRepository.findById(id)
+        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado con ID: " + id));
+  }
+
+  /// create ------------------------------------------------------------------
+
   @Transactional
   public Medico addMedico(MedicoDTO medicoDTO) {
 
@@ -79,15 +117,11 @@ public class MedicoService {
     return medico;
   }
 
-  @Transactional(readOnly = true)
-  public Medico getMedicoById(Long id) {
-    return medicoRepository.findById(id)
-        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado con ID: " + id));
-  }
 
+  /// update ------------------------------------------------------------------
 
-  // update findById
   @Transactional
+  // update findById
   public void updateMedico_findById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
@@ -109,8 +143,8 @@ public class MedicoService {
     medicoRepository.save(medico);
   }
 
-  // update getReferenceById
   @Transactional
+  // update getReferenceById
   public void updateMedico_getReferenceById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
@@ -131,17 +165,6 @@ public class MedicoService {
 //    medicoRepository.save(medico);
   }
 
-
-  // delete
-  @Transactional
-  public void eliminarMedicoHard(Long id) {
-//    Medico medico = medicoRepository.getReferenceById(id);
-    if (!medicoRepository.existsById(id)) {
-      throw new MedicoNotFoundException(id);
-    }
-    medicoRepository.deleteById(id);
-  }
-
   public String excluirMedicoPojo(Long id) {
     Medico medico = medicoRepository.findById(id)
         .orElseThrow(() -> new MedicoNotFoundException(id));  // Custom exception
@@ -156,53 +179,49 @@ public class MedicoService {
     return "Médico con ID " + id + " marcado como inactivo correctamente.";
   }
 
-  public String excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
+  public void excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
     Medico medico = medicoRepository.findById(id)
-        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado"));
+        .orElseThrow(() -> new MedicoNotFoundException(id));
 
-    if (medico.getInactivo()) {
-      throw new IllegalStateException("El médico ya está marcado como inactivo");
+//    if (medico.getInactivo()) {
+//      throw new IllegalStateException("El médico ya está marcado como inactivo");
+//    }
+
+//    medico.setInactivo(medicoExclusionDTO.inactivo());
+//    medicoRepository.save(medico);
+//
+//    return "Médico con ID " + id + " marcado como inactivo correctamente.";
+    if (medicoExclusionDTO.inactivo()) {
+      if (medico.getInactivo()) {
+        throw new IllegalStateException("El médico ya está marcado como inactivo");
+      }
+      medico.setInactivo(true);  // Marcar como inactivo
+    } else {
+      if (!medico.getInactivo()) {
+        throw new IllegalStateException("El médico ya está marcado como activo");
+      }
+      medico.setInactivo(false);  // Marcar como activo
     }
 
-    medico.setInactivo(medicoExclusionDTO.inactivo());
-    medicoRepository.save(medico);
+    medicoRepository.save(medico);  // Guardar cambios en la base de datos
 
-    return "Médico con ID " + id + " marcado como inactivo correctamente.";
+
   }
 
 
-  //------------------------------------
-  // retorna entidades
-  @Transactional(readOnly = true)
-  public List<Medico> listarMedicosInactivosEntidades() {
-    return medicoRepository.findByInactivoTrue();
+  /// delete ------------------------------------------------------------------
+
+  @Transactional
+  public String eliminarMedicoHard(Long id) {
+    if (!medicoRepository.existsById(id)) {
+      throw new MedicoNotFoundException(id);  // Throw an exception if not found
+    }
+    // We eliminate the doctor
+    medicoRepository.deleteById(id);
+
+    // Success message
+    return "Médico con ID " + id + " eliminado exitosamente.";
+
   }
-
-  // retorna DTOs
-  @Transactional(readOnly = true)
-  public List<MedicoListadoSimpleDTO> listarMedicosInactivosDTO() {
-    return medicoRepository.findByInactivoTrue()
-        .stream()
-        .map(MedicoListadoSimpleDTO::new)
-        .toList();
-  }
-
-  // return DTOs paginados
-  @Transactional(readOnly = true)
-  public Page<MedicoListadoSimpleDTO> listarMedicosActivosDTO(Pageable page) {
-    Page<Medico> medicosPage = medicoRepository.findByInactivoFalse(page);
-    return medicosPage
-        .map(MedicoListadoSimpleDTO::new);
-  }
-
-
-  @Transactional(readOnly = true)
-  public List<MedicoListadoSimpleDTO> listarMedicosPorEstado(boolean inactivo) {
-    return medicoRepository.findByInactivo(inactivo)
-        .stream()
-        .map(MedicoListadoSimpleDTO::new)
-        .toList();
-  }
-
 
 }
