@@ -15,7 +15,7 @@ public record MedicoDTO(
     @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces")
     String nombre,
 
-    @NotBlank(message = "email required")
+    @NotBlank(message = "The email is required.")
     @Email(message = "The email must have a valid format.")
     String email,
 

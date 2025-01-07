@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class GlobalExceptionHandler {
   @Autowired
   private HttpServletRequest request;
 
+  // Handler for custom validation exception.
   @ExceptionHandler(MedicoNotFoundException.class)
   public ResponseEntity<Map<String, Object>> handleMedicoNotFoundException(MedicoNotFoundException ex) {
     Map<String, Object> response = Map.of(
@@ -34,6 +36,8 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // Retorna 404 Not Found
   }
 
+
+  // Handler for IllegalStateException
   @ExceptionHandler(IllegalStateException.class)
   public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex) {
     Map<String, Object> response = Map.of(
@@ -47,8 +51,7 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.CONFLICT); // Retorna 409 Conflict
   }
 
-
-  // Manejador para las excepciones de validación
+  // Handler for ValidationException
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
     // Crear una respuesta personalizada
@@ -67,6 +70,17 @@ public class GlobalExceptionHandler {
     // Incluir los detalles de los errores en la respuesta
     response.put("errors", errors);
 
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+  // Handler for IllegalArgumentException
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    Map<String, Object> response = new HashMap<>();
+    response.put("timestamp", LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    response.put("status", HttpStatus.BAD_REQUEST.value());
+    response.put("error", "Bad Request");
+    response.put("message", ex.getMessage());
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
