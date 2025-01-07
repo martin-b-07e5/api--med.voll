@@ -36,7 +36,7 @@ public class Medico {
   @JsonProperty("documento")
   private String documento;
 
-  @NotNull(message = "Field may not be null. However, the field can be empty.")
+  @NotNull
   @Enumerated(EnumType.STRING)
   @JsonProperty("especialidad")
   private EspecialidadEnum especialidad;

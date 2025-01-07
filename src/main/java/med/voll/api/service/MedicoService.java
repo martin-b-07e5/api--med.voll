@@ -183,14 +183,6 @@ public class MedicoService {
     Medico medico = medicoRepository.findById(id)
         .orElseThrow(() -> new MedicoNotFoundException(id));
 
-//    if (medico.getInactivo()) {
-//      throw new IllegalStateException("El médico ya está marcado como inactivo");
-//    }
-
-//    medico.setInactivo(medicoExclusionDTO.inactivo());
-//    medicoRepository.save(medico);
-//
-//    return "Médico con ID " + id + " marcado como inactivo correctamente.";
     if (medicoExclusionDTO.inactivo()) {
       if (medico.getInactivo()) {
         throw new IllegalStateException("El médico ya está marcado como inactivo");
@@ -204,8 +196,6 @@ public class MedicoService {
     }
 
     medicoRepository.save(medico);  // Guardar cambios en la base de datos
-
-
   }
 
 

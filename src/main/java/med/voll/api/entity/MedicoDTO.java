@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.Data;
 
 public record MedicoDTO(
 
@@ -14,11 +15,11 @@ public record MedicoDTO(
     @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s]+$", message = "The name can only contain letters and spaces")
     String nombre,
 
-    @NotBlank
+    @NotBlank(message = "email required")
     @Email(message = "The email must have a valid format.")
     String email,
 
-    @NotBlank
+    @NotBlank(message = "must not be blank. Be careful")
     @Pattern(regexp = "^\\d+$", message = "The document must contain only numbers.")
     String documento,
 

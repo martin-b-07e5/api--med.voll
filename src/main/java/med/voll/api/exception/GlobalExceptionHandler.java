@@ -4,11 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,4 +46,29 @@ public class GlobalExceptionHandler {
 
     return new ResponseEntity<>(response, HttpStatus.CONFLICT); // Retorna 409 Conflict
   }
+
+
+  // Manejador para las excepciones de validación
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
+    // Crear una respuesta personalizada
+    Map<String, Object> response = new HashMap<>();
+    response.put("timestamp1", LocalDateTime.now());
+    response.put("timestamp2", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+    response.put("status", HttpStatus.BAD_REQUEST.value());
+    response.put("error", "Bad Request");
+    response.put("message", "Validation failed");
+
+    // Obtener los errores de validación
+    List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+        .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+        .collect(Collectors.toList());
+
+    // Incluir los detalles de los errores en la respuesta
+    response.put("errors", errors);
+
+    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+  }
+
+
 }
