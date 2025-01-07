@@ -170,8 +170,11 @@ public class MedicoService {
   // delete
   @Transactional
   public void eliminarMedicoHard(Long id) {
-    Medico medico = medicoRepository.getReferenceById(id);
-    medicoRepository.delete(medico);
+//    Medico medico = medicoRepository.getReferenceById(id);
+    if (!medicoRepository.existsById(id)) {
+      throw new MedicoNotFoundException(id);
+    }
+    medicoRepository.deleteById(id);
   }
 
 //  @Transactional
