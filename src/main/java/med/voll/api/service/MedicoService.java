@@ -2,6 +2,7 @@ package med.voll.api.service;
 
 import jakarta.persistence.EntityNotFoundException;
 //import jakarta.transaction.Transactional;
+import med.voll.api.exception.MedicoNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import med.voll.api.controller.MedicoController;
 import med.voll.api.entity.*;
@@ -93,7 +94,7 @@ public class MedicoService {
   @Transactional(readOnly = true)
   public Medico getMedicoById(Long id) {
     return medicoRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + id));
+        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado con ID: " + id));
   }
 
 

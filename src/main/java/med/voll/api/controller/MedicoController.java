@@ -64,6 +64,7 @@ public class MedicoController {
   }
 
   @GetMapping("/{id}")  // Endpoint to get a doctor's details by ID
+//  http://localhost:8080/medicos/57
   public ResponseEntity<MedicoDTO> getMedicoById(@PathVariable Long id) {
     Medico medico = medicoService.getMedicoById(id);  // Fetch the doctor from the service
     if (medico != null) {
