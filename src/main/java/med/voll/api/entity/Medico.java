@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Entity(name = "Medico")  /*default class name*/
+@Entity(name = "Medico")  /* default class name */
 @Table(name = "medicos")
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class Medico {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id_medico") // nombre de la columna en la DB
+  @Column(name = "id_medico") // name of the column in the DB
   private Long id;
 
   @NotBlank
