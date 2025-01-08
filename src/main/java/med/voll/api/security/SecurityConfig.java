@@ -7,12 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 /// https://docs.spring.io/spring-security/reference/servlet/getting-started.html#servlet-hello-auto-configuration
 
@@ -21,7 +24,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig {
 
   @Autowired
-  private AutenticationService autenticationService;
+  private AuthenticationService authenticationService;
 
 
   @Bean
@@ -45,5 +48,36 @@ public class SecurityConfig {
   DefaultAuthenticationEventPublisher defaultAuthenticationEventPublisher(ApplicationEventPublisher delegate) {
     return new DefaultAuthenticationEventPublisher(delegate);
   }
+
+
+  // https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#disable-csrf
+//  @Bean
+//  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    http
+//        // ...
+//        .csrf((csrf) -> csrf.disable());
+////        .authorizeHttpRequests(authorize -> authorize
+////            .requestMatchers("/user/**").hasRole("USER")
+////                .requestMatchers("/admin/**").hasRole("ADMIN")
+////                .anyRequest().authenticated()
+////        );
+////        .formLogin(withDefaults());
+//    return http.build();
+//  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//        .authorizeHttpRequests(req -> {
+//          req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+//          req.anyRequest().authenticated();
+//        })
+//        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+    return http.build();
+  }
+
+  // Configuring security filters with CSRF off
 
 }
