@@ -23,7 +23,7 @@ public class AuthenticationController {
 
 
   @PostMapping
-  public ResponseEntity<?> autenticarUsuario2(@RequestBody @Valid DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
+  public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
 
     // Create an authentication token based on the user's credentials
     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
