@@ -38,7 +38,7 @@ public class AuthenticationController {
     String jwt = jwtService.generateToken(authentication);
 
     // Return token in the response
-    return ResponseEntity.ok(new JwtResponse(jwt));
+    return ResponseEntity.ok(new JwtResponseDTO(jwt));
   }
 
 }
