@@ -19,29 +19,28 @@ public class AuthenticationController {
   private AuthenticationConfiguration authenticationConfiguration;
 
   @Autowired
+  private JwtService jwtService;
+
+  @Autowired
   private AuthenticationManager authenticationManager;
 
 
-//  @PostMapping
-//  public ResponseEntity<?> autenticarUsuario(@RequestBody DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) throws Exception {
-//    Authentication token = new UsernamePasswordAuthenticationToken(
-//        datosAutenticacionUsuario.username(),
-//        datosAutenticacionUsuario.password()
-//    );
-//    authenticationManager.authenticate(token);  // Esto debería autenticar al usuario
-//    return ResponseEntity.ok().build();
-//  }
-
   @PostMapping
-  public ResponseEntity<?> autenticarUsuario(@RequestBody DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) throws Exception {
-    Authentication token = new UsernamePasswordAuthenticationToken(
+  public ResponseEntity<?> autenticarUsuario2(@RequestBody DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
+    // Crear un token de autenticación basado en las credenciales del usuario
+    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
         datosAutenticacionUsuario.username(),
         datosAutenticacionUsuario.password()
     );
-    Authentication authentication = authenticationManager.authenticate(token);
-//    String jwt = jwtService.generateToken(authentication);  // Aquí deberías generar el JWT
-//    return ResponseEntity.ok(new JwtResponse(jwt));  // Devuelves el token al cliente
-    return null;  // temporal
+
+    // Autenticar al usuario
+    Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+    // Generar el token JWT usando JwtService
+    String jwt = jwtService.generateToken(authentication);
+
+    // Devolver el token en la respuesta
+    return ResponseEntity.ok(new JwtResponse(jwt));
   }
 
 

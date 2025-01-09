@@ -32,33 +32,14 @@ public class SecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
-  // extraer y validar el jwt
-
-
-//  @Bean
-//  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//    http
-//        .csrf(csrf -> csrf.disable())
-//        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        .authorizeHttpRequests(req -> {
-////          req.requestMatchers("/login").permitAll()
-//          req.requestMatchers(HttpMethod.POST, "/login").permitAll();
-////          req.requestMatchers("/medicos").hasRole("ADMIN"); // Rutas protegidas por rol
-//          req.requestMatchers("/medicos").authenticated();  // sin role
-//          req.anyRequest().authenticated();
-//        });
-//    return http.build();
-//  }
-
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
-          req.requestMatchers(HttpMethod.POST, "/login").permitAll();
-          req.requestMatchers("/medicos").authenticated();  // solo autenticados
-          req.anyRequest().authenticated();
+          req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Permitir acceso sin autenticación
+          req.anyRequest().authenticated();  // Requiere autenticación para otros endpoints
         })
         // Añadir filtro para JWT
         .addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //

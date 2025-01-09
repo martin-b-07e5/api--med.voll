@@ -1,6 +1,7 @@
 package med.voll.api.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +10,16 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-  private String secretKey = "yourSecretKey";  // Usa una clave secreta
+  @Value("${jwt.secretKey}")
+  private String secretKey;
 
 
   public String generateToken(Authentication authentication) {
     return Jwts.builder()
-        .setSubject(authentication.getName())
-        .setIssuedAt(new Date())
+        .setSubject(authentication.getName())  // Nombre del usuario
+        .setIssuedAt(new Date())               // Fecha de emisión
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Expira en 1 hora
-        .signWith(SignatureAlgorithm.HS256, secretKey)
+        .signWith(SignatureAlgorithm.HS256, secretKey)  // Firmar con la clave secreta
         .compact();
   }
 
