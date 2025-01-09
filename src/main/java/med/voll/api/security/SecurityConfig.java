@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,6 +26,7 @@ public class SecurityConfig {
   private UserDetailsService userDetailsService;
 
 
+  // Password encoder
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
@@ -38,20 +38,18 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
-          req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Permitir acceso sin autenticación
-          req.anyRequest().authenticated();  // Requiere autenticación para otros endpoints
+          req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Allow access without authentication
+          req.anyRequest().authenticated();  // Authentication required for other endpoints
         })
-        // Añadir filtro para JWT
+        // Add filter for JWT
         .addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //
     return http.build();
   }
 
-
-  // este lo hizo el profesor ver si se puede borrar
+  // Authenticate the user
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
-
 
 }

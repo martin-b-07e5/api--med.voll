@@ -12,17 +12,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Entity(name = "usuario") /* default class name */
+@Entity
 @Table(name = "usuarios")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Usuario implements UserDetails {
 
   @Id
@@ -49,45 +48,26 @@ public class Usuario implements UserDetails {
     return roles.stream()
         .map(role -> new SimpleGrantedAuthority(role))
         .collect(Collectors.toList());
-
   }
-
-
-  //----------------------------------------------------------------
-  // agregado a mano
-  @Override
-  public String getPassword() {
-    return password;
-  }
-
-  @Override
-  public String getUsername() {
-    return username;
-  }
-//----------------------------------------------------------------
 
   @Override
   public boolean isAccountNonExpired() {
-//    return UserDetails.super.isAccountNonExpired();
-    return true;
+    return UserDetails.super.isAccountNonExpired();
   }
 
   @Override
   public boolean isAccountNonLocked() {
-//    return UserDetails.super.isAccountNonLocked();
-    return true;
+    return UserDetails.super.isAccountNonLocked();
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-//    return UserDetails.super.isCredentialsNonExpired();
-    return true;
+    return UserDetails.super.isCredentialsNonExpired();
   }
 
   @Override
   public boolean isEnabled() {
-//    return UserDetails.super.isEnabled();
-    return true;
+    return UserDetails.super.isEnabled();
   }
 
 }

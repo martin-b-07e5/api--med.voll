@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
   @Autowired
-  private AuthenticationConfiguration authenticationConfiguration;
-
-  @Autowired
   private JwtService jwtService;
 
   @Autowired
@@ -27,21 +23,21 @@ public class AuthenticationController {
 
   @PostMapping
   public ResponseEntity<?> autenticarUsuario2(@RequestBody DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
-    // Crear un token de autenticación basado en las credenciales del usuario
+
+    // Create an authentication token based on the user's credentials
     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
         datosAutenticacionUsuario.username(),
         datosAutenticacionUsuario.password()
     );
 
-    // Autenticar al usuario
+    // Authenticate the user
     Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-    // Generar el token JWT usando JwtService
+    // Generate JWT token using JwtService
     String jwt = jwtService.generateToken(authentication);
 
-    // Devolver el token en la respuesta
+    // Return token in the response
     return ResponseEntity.ok(new JwtResponse(jwt));
   }
-
 
 }

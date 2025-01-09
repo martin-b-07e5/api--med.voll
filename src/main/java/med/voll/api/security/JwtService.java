@@ -13,13 +13,12 @@ public class JwtService {
   @Value("${jwt.secretKey}")
   private String secretKey;
 
-
   public String generateToken(Authentication authentication) {
     return Jwts.builder()
-        .setSubject(authentication.getName())  // Nombre del usuario
-        .setIssuedAt(new Date())               // Fecha de emisión
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Expira en 1 hora
-        .signWith(SignatureAlgorithm.HS256, secretKey)  // Firmar con la clave secreta
+        .setSubject(authentication.getName())  // User's name
+        .setIssuedAt(new Date())               // Date of issue (emisión)
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // Expires in 1 week
+        .signWith(SignatureAlgorithm.HS256, secretKey)  // Sign with the secret key
         .compact();
   }
 
@@ -44,4 +43,5 @@ public class JwtService {
         .getBody()
         .getSubject();
   }
+
 }
