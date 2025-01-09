@@ -1,5 +1,6 @@
 package med.voll.api.security;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,7 @@ public class AuthenticationController {
 
 
   @PostMapping
-  public ResponseEntity<?> autenticarUsuario2(@RequestBody DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
+  public ResponseEntity<?> autenticarUsuario2(@RequestBody @Valid DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
 
     // Create an authentication token based on the user's credentials
     Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
