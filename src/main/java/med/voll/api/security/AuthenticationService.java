@@ -17,24 +17,32 @@ public class AuthenticationService implements UserDetailsService {
   @Autowired
   private UsuarioRepository usuarioRepository;
 
-
-  @Override
+  //  @Override
+//  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//    var usuario = usuarioRepository.findByUsername(username)
+//        .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+//
+//    return new org.springframework.security.core.userdetails.User(
+//        usuario.getUsername(),
+//        usuario.getPassword(),
+//        usuario.getEnabled(),
+//        true,
+//        true,
+//        true,
+//        usuario.getRoles().stream()
+//            .map(SimpleGrantedAuthority::new)
+//            .collect(Collectors.toList())
+//    );
+//  }
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Usuario usuario = (Usuario) usuarioRepository.findByUsername(username);
 
-    Usuario usuario = usuarioRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    if (usuario == null) {
+      throw new UsernameNotFoundException("User not found with username: " + username);
+    }
 
-    return new org.springframework.security.core.userdetails.User(
-        usuario.getUsername(),
-        usuario.getPassword(),
-        usuario.getEnabled(),
-        true,
-        true,
-        true,
-        usuario.getRoles().stream()
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toSet())
-    );
+    return usuario;
   }
+
 
 }
