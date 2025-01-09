@@ -60,8 +60,8 @@ public class SecurityConfig {
           req.requestMatchers("/medicos").authenticated();  // solo autenticados
           req.anyRequest().authenticated();
         })
-        .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);  //
-    // Añadir filtro para JWT
+        // Añadir filtro para JWT
+        .addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //
     return http.build();
   }
 

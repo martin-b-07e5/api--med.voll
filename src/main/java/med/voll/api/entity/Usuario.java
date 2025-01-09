@@ -90,18 +90,4 @@ public class Usuario implements UserDetails {
     return true;
   }
 
-
-  // my methos
-  public void setRoles(Set<String> roles) {
-    if (roles != null) {
-      for (String role : roles) {
-        if (!role.startsWith("ROLE_")) {
-          throw new IllegalArgumentException("Role must start with 'ROLE_': " + role);
-        }
-      }
-
-    }
-    this.roles = roles;
-  }
-
 }
