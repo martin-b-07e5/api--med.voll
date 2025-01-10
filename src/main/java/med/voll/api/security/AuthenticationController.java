@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
   @Autowired
-  private JwtService jwtService;
+  private JwtCreateService jwtCreateService;
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -26,19 +26,20 @@ public class AuthenticationController {
   public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
 
     // Create an authentication token based on the user's credentials
-    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(
+    Authentication authToken = new UsernamePasswordAuthenticationToken(
         datosAutenticacionUsuario.username(),
         datosAutenticacionUsuario.password()
     );
 
     // Authenticate the user
-    Authentication authentication = authenticationManager.authenticate(authenticationToken);
+    Authentication authUser = authenticationManager.authenticate(authToken);
 
     // Generate JWT token using JwtService
-    String jwt = jwtService.generateToken(authentication);
+    String jwtToken = jwtCreateService.generateToken(authUser);
 
     // Return token in the response
-    return ResponseEntity.ok(new JwtResponseDTO(jwt));
+//    return ResponseEntity.ok(new JwtResponseDTO(jwtToken));
+    return ResponseEntity.ok(jwtToken);
   }
 
 }

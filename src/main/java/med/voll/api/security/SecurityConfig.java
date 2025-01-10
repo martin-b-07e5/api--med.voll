@@ -21,7 +21,7 @@ public class SecurityConfig {
 
   // dependency injection
   @Autowired
-  private JwtService jwtService;
+  private JwtCreateService jwtCreateService;
   @Autowired
   private UserDetailsService userDetailsService;
 
@@ -42,7 +42,7 @@ public class SecurityConfig {
           req.anyRequest().authenticated();  // Authentication required for other endpoints
         })
         // Add filter for JWT
-        .addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //
+        .addFilterBefore(new JwtAuthenticationFilter(jwtCreateService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //
     return http.build();
   }
 

@@ -1,14 +1,4 @@
-package med.voll.api.security;
-
-//@Setter
-//@Getter
-//public class JwtResponse {
-//  private String jwt;
+//package med.voll.api.security;
 //
-//  public JwtResponse(String jwt) {
-//    this.jwt = jwt;
-//  }
-//
+//public record JwtResponseDTO(String jwt) {
 //}
-public record JwtResponseDTO(String jwt) {
-}
