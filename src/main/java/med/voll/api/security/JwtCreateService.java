@@ -3,8 +3,8 @@ package med.voll.api.security;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import med.voll.api.entity.Usuario;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,12 +17,13 @@ public class JwtCreateService {
 
   String issuer = "auth0-vol-med";
 
-  public String generateToken(Authentication authentication) {
+  public String generateToken(Usuario usuario) {
     try {
       Algorithm signatureAlgorithm = Algorithm.HMAC256(secretKey);
       return com.auth0.jwt.JWT.create()
           .withIssuer(issuer)
-          .withSubject(authentication.getName())
+          .withSubject(usuario.getUsername())
+          .withClaim("id", usuario.getId()) // Now you have access to usuario.getId()
           .withIssuedAt(new Date(System.currentTimeMillis()))
           .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))  // Expires in 1 week
           .sign(signatureAlgorithm);

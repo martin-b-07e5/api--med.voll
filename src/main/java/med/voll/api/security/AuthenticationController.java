@@ -1,7 +1,9 @@
 package med.voll.api.security;
 
 import jakarta.validation.Valid;
+import med.voll.api.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,14 +34,17 @@ public class AuthenticationController {
     );
 
     // Authenticate the user
-    Authentication authUser = authenticationManager.authenticate(authToken);
+    Authentication authenticatedUser = authenticationManager.authenticate(authToken);
 
-    // Generate JWT token using JwtService
-    String jwtToken = jwtCreateService.generateToken(authUser);
+    if (authenticatedUser.getPrincipal() instanceof Usuario) {
+      Usuario usuario = (Usuario) authenticatedUser.getPrincipal();
+      String jwtToken = jwtCreateService.generateToken(usuario);  // Generate JWT token using JwtService
 
-    // Return token in the response
-//    return ResponseEntity.ok(new JwtResponseDTO(jwtToken));
-    return ResponseEntity.ok(jwtToken);
+      return ResponseEntity.ok(jwtToken);  // Return token in the response
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+    }
+
   }
 
 }
