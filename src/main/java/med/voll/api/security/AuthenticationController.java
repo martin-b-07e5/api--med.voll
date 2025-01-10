@@ -40,7 +40,8 @@ public class AuthenticationController {
       Usuario usuario = (Usuario) authenticatedUser.getPrincipal();
       String jwtToken = jwtCreateService.generateToken(usuario);  // Generate JWT token using JwtService
 
-      return ResponseEntity.ok(jwtToken);  // Return token in the response
+//      return ResponseEntity.ok(jwtToken);  // Return token in the response
+      return ResponseEntity.ok(new JwtResponseDTO(jwtToken));  // Return token in the response
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }

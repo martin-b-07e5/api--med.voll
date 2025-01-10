@@ -1,4 +1,4 @@
-//package med.voll.api.security;
-//
-//public record JwtResponseDTO(String jwt) {
-//}
+package med.voll.api.security;
+
+public record JwtResponseDTO(String jwtToken) {
+}
