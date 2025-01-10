@@ -31,7 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
     String token = extractToken(request);  // get the token from the header.
 //    System.out.println("\n---------- token: " + token);
 
-
     if (token != null && jwtService.isTokenValid(token)) {
       String username = jwtService.getUsernameFromToken(token);
 //      System.out.println("\n---------- username: " + username + " ----------\n");
@@ -41,7 +40,9 @@ public class JwtFilter extends OncePerRequestFilter {
 //      System.out.println("Password: " + userDetails.getPassword());
       System.out.println("Role: " + userDetails.getAuthorities() + "\n");
 
+      // Creates an authentication token with user details and roles.
       var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+      // Sets the authentication in the security context.
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
     filterChain.doFilter(request, response);
