@@ -1,6 +1,6 @@
 package med.voll.api.security;
 
-public record DatosAutenticacionUsuarioDTO(
+public record AuthUsuarioDTO(
     String username,
     String password
 ) {

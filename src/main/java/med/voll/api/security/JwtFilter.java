@@ -8,17 +8,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+@Component
+public class JwtFilter extends OncePerRequestFilter {
 
-  private final JwtCreateService jwtCreateService;
+  private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
 
-  public JwtAuthenticationFilter(JwtCreateService jwtCreateService, UserDetailsService userDetailsService) {
-    this.jwtCreateService = jwtCreateService;
+  public JwtFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    this.jwtService = jwtService;
     this.userDetailsService = userDetailsService;
   }
 
@@ -26,18 +28,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String token = extractToken(request);
+    String token = extractToken(request);  // get the token from the header.
 
-    if (token != null && jwtCreateService.isTokenValid(token)) {
-      String username = jwtCreateService.getUsernameFromToken(token);
+    if (token != null && jwtService.isTokenValid(token)) {
+      String username = jwtService.getUsernameFromToken(token);
+//      System.out.println("\n---------- username: " + username + " ----------\n");
+
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//      System.out.println("\n---------- Username: " + userDetails.getUsername());
+//      System.out.println("---------- Password: " + userDetails.getPassword());
+//      System.out.println("---------- Role: " + userDetails.getAuthorities() + "\n");
+
       var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-      SecurityContextHolder.getContext().setAuthentication(authentication);
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }
     filterChain.doFilter(request, response);
   }
 
+  // get the token from the header.
   private String extractToken(HttpServletRequest request) {
     String bearer = request.getHeader("Authorization");
     if (bearer != null && bearer.startsWith("Bearer ")) {

@@ -22,6 +22,16 @@ public class DataLoader implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws Exception {
+    if (usuarioRepository.count() == 0) {
+      Usuario admin = new Usuario();
+      admin.setUsername("admin");
+      admin.setPassword(passwordEncoder.encode("admin"));
+      admin.setEnabled(true);
+      admin.setRoles(Set.of("ROLE_ADMIN"));
+
+      usuarioRepository.save(admin);
+      System.out.println("Usuario creado con éxito.");
+    }
     if (usuarioRepository.count() == 1) {
       Usuario usuario = new Usuario();
       usuario.setUsername("usuario");

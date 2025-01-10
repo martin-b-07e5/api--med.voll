@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-public class AuthenticationController {
+public class AuthController {
 
   @Autowired
-  private JwtCreateService jwtCreateService;
+  private JwtService jwtService;
 
   @Autowired
   private AuthenticationManager authenticationManager;
 
 
   @PostMapping
-  public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid DatosAutenticacionUsuarioDTO datosAutenticacionUsuario) {
+  public ResponseEntity<?> autenticarUsuario(@RequestBody @Valid AuthUsuarioDTO authUsuarioDTO) {
 
     // Create an authentication token based on the user's credentials
     Authentication authToken = new UsernamePasswordAuthenticationToken(
-        datosAutenticacionUsuario.username(),
-        datosAutenticacionUsuario.password()
+        authUsuarioDTO.username(),
+        authUsuarioDTO.password()
     );
 
     // Authenticate the user
@@ -38,10 +38,10 @@ public class AuthenticationController {
 
     if (authenticatedUser.getPrincipal() instanceof Usuario) {
       Usuario usuario = (Usuario) authenticatedUser.getPrincipal();
-      String jwtToken = jwtCreateService.generateToken(usuario);  // Generate JWT token using JwtService
+      String jwtToken = jwtService.generateToken(usuario);  // Generate JWT token using JwtService
 
 //      return ResponseEntity.ok(jwtToken);  // Return token in the response
-      return ResponseEntity.ok(new JwtResponseDTO(jwtToken));  // Return token in the response
+      return ResponseEntity.ok(new JwtDTO(jwtToken));  // Return token in the response in json format
     } else {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }

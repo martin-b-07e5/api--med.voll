@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class JwtCreateService {
+public class JwtService {
 
   @Value("${jwt.secretKey}")
   private String secretKey;
@@ -38,7 +38,7 @@ public class JwtCreateService {
     try {
       Algorithm algorithm = Algorithm.HMAC256(secretKey);
       com.auth0.jwt.JWT.require(algorithm)
-          .withIssuer(issuer) // Valida también el issuer
+          .withIssuer(issuer) // Also validates the issuer
           .build()
           .verify(token);
       return true; // Token is valid
