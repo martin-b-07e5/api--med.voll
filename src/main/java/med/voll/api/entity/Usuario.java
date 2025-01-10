@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,15 +40,13 @@ public class Usuario implements UserDetails {
   @ElementCollection(fetch = FetchType.EAGER)
   private Set<String> roles; // Example roles: ["ROLE_ADMIN", "ROLE_USER"]
 
-
   //----------------------------------------------------------------
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    // Example roles: ["ROLE_ADMIN", "ROLE_USER"]
-    return List.of(new SimpleGrantedAuthority("ROLE_ADMIN")); // This is how the professor did it.
-//    return roles.stream()
-//        .map(role -> new SimpleGrantedAuthority(role))
-//        .collect(Collectors.toList());
+    System.out.println("Roles: " + roles); // Verifica los roles del usuario
+    return roles.stream()
+        .map(role -> new SimpleGrantedAuthority(role))
+        .collect(Collectors.toList());
   }
 
   @Override

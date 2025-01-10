@@ -29,15 +29,17 @@ public class JwtFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     String token = extractToken(request);  // get the token from the header.
+//    System.out.println("\n---------- token: " + token);
+
 
     if (token != null && jwtService.isTokenValid(token)) {
       String username = jwtService.getUsernameFromToken(token);
 //      System.out.println("\n---------- username: " + username + " ----------\n");
 
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//      System.out.println("\n---------- Username: " + userDetails.getUsername());
+      System.out.println("\n---------- Username: " + userDetails.getUsername());
 //      System.out.println("---------- Password: " + userDetails.getPassword());
-//      System.out.println("---------- Role: " + userDetails.getAuthorities() + "\n");
+      System.out.println("---------- Role: " + userDetails.getAuthorities() + "\n");
 
       var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -24,6 +25,8 @@ public class SecurityConfig {
   private JwtService jwtService;
   @Autowired
   private UserDetailsService userDetailsService;
+  @Autowired
+  private AccessDeniedHandler accessDeniedHandler;
 
 
   // Password encoder
@@ -39,10 +42,17 @@ public class SecurityConfig {
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
           req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Allow access without authentication
-          req.anyRequest().authenticated();  // Authentication required for other endpoints
+          req.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");  // POST only for admin
+          req.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");   // PUT only for admin
+          req.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN"); // DELETE only for admin
+          req.requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER");  // Read access for both admin and user
+          req.anyRequest().authenticated();  // Authentication required for all other endpoints
         })
         // Add filter for JWT
-        .addFilterBefore(new JwtFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class);  //
+        .addFilterBefore(new JwtFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+        // Set custom AccessDeniedHandler
+        .exceptionHandling()
+        .accessDeniedHandler(accessDeniedHandler);
     return http.build();
   }
 
