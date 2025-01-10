@@ -43,7 +43,7 @@ public class Usuario implements UserDetails {
   //----------------------------------------------------------------
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    System.out.println("Roles: " + roles); // Verifica los roles del usuario
+//    System.out.println("Roles: " + roles); // Verifica los roles del usuario
     return roles.stream()
         .map(role -> new SimpleGrantedAuthority(role))
         .collect(Collectors.toList());

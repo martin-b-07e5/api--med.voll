@@ -51,8 +51,7 @@ public class SecurityConfig {
         // Add filter for JWT
         .addFilterBefore(new JwtFilter(jwtService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
         // Set custom AccessDeniedHandler
-        .exceptionHandling()
-        .accessDeniedHandler(accessDeniedHandler);
+        .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler)); // Updated for Spring Security 6.1+
     return http.build();
   }
 

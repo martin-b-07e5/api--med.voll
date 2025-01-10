@@ -37,9 +37,9 @@ public class JwtFilter extends OncePerRequestFilter {
 //      System.out.println("\n---------- username: " + username + " ----------\n");
 
       UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-      System.out.println("\n---------- Username: " + userDetails.getUsername());
-//      System.out.println("---------- Password: " + userDetails.getPassword());
-      System.out.println("---------- Role: " + userDetails.getAuthorities() + "\n");
+      System.out.println("\nUsername: " + userDetails.getUsername());
+//      System.out.println("Password: " + userDetails.getPassword());
+      System.out.println("Role: " + userDetails.getAuthorities() + "\n");
 
       var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(authentication);
