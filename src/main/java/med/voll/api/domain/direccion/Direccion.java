@@ -1,4 +1,4 @@
-package med.voll.api.entity;
+package med.voll.api.domain.direccion;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import med.voll.api.domain.medico.MedicoDTO;
+import med.voll.api.domain.paciente.PacienteDTO;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Embeddable

@@ -1,7 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.entity.*;
+import med.voll.api.domain.medico.*;
 import med.voll.api.exception.MedicoNotFoundException;
 import med.voll.api.service.MedicoService;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class MedicoController {
     return medicoService.listarPaginadoEquivalente(pageable);
   }
 
-  @GetMapping("/{id}")  // Endpoint to get a doctor's details by ID
+  @GetMapping("/{idMedico}")  // Endpoint to get a doctor's details by ID
 //  http://localhost:8080/medicos/57
   public ResponseEntity<MedicoDTO> getMedicoById(@PathVariable Long id) {
     Medico medico = medicoService.getMedicoById(id);  // Fetch the doctor from the service
@@ -117,8 +117,8 @@ public class MedicoController {
     Medico medico = medicoService.addMedico(medicoDTO);
 
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(medico.getId())  // Builds the URL with the generated ID
+        .path("/{idMedico}")
+        .buildAndExpand(medico.getIdMedico())  // Builds the URL with the generated ID
         .toUri();
 
     return ResponseEntity.created(location).body(medico);  // ResponseEntity.created(location) is the one that sets the 201 Created.
@@ -136,20 +136,20 @@ public class MedicoController {
   @PutMapping  // Endpoint to update a doctor's information
   public ResponseEntity<MedicoUpdateDTO> actualizarMedico(@RequestBody @Valid MedicoUpdateDTO medicoUpdateDTO) {
     medicoService.updateMedico_getReferenceById(medicoUpdateDTO);  // Updates the doctor's details in the database
-    Medico medicoActualizado = medicoService.getMedicoById(medicoUpdateDTO.id()); // Fetches the updated doctor from the database
+    Medico medicoActualizado = medicoService.getMedicoById(medicoUpdateDTO.idMedico()); // Fetches the updated doctor from the database
     return ResponseEntity.ok(new MedicoUpdateDTO(medicoActualizado));  // Returns the updated doctor data in the response
   }
 
-  @PatchMapping("/{id}/excluirPojo")
+  @PatchMapping("/{idMedico}/excluirPojo")
   // http://localhost:8080/medicos/39/excluirPojo
   public ResponseEntity<String> excluirMedicoPojo(@PathVariable Long id) {
     String message = medicoService.excluirMedicoPojo(id);
     return ResponseEntity.ok(message);  // Returns a confirmation message in the response
   }
 
-  @PatchMapping("/{id}/excluirDTO")
+  @PatchMapping("/{idMedico}/excluirDTO")
   public ResponseEntity<String> excluirDTO(@PathVariable Long id, @RequestBody MedicoExclusionDTO medicoExclusionDTO) {
-    Medico medico = medicoService.getMedicoById(id); // Obtener el médico por id
+    Medico medico = medicoService.getMedicoById(id); // Obtener el médico por idMedico
 
     // Si el médico ya está en el estado deseado, solo hacemos un return
     if (medico.getInactivo() == medicoExclusionDTO.inactivo()) {
@@ -172,7 +172,7 @@ public class MedicoController {
 
   /// delete ------------------------------------------------------------------
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{idMedico}")
   // http://localhost:8080/medicos/57
   public ResponseEntity<String> eliminarMedicoHard(@PathVariable Long id) {
     try {

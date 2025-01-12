@@ -1,4 +1,4 @@
-package med.voll.api.entity;
+package med.voll.api.domain.medico;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

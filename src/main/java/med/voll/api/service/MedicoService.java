@@ -1,10 +1,10 @@
 package med.voll.api.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import med.voll.api.domain.medico.*;
 import med.voll.api.exception.MedicoNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import med.voll.api.controller.MedicoController;
-import med.voll.api.entity.*;
 import med.voll.api.mapper.MedicoValidatorMapper;
 import med.voll.api.repository.MedicoRepository;
 import org.slf4j.Logger;
@@ -125,7 +125,7 @@ public class MedicoService {
   public void updateMedico_findById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
-    Medico medico = medicoRepository.findById(medicoUpdateDTO.id())
+    Medico medico = medicoRepository.findById(medicoUpdateDTO.idMedico())
         .orElseThrow(() -> new EntityNotFoundException("Médico no encontrado"));
 
     // Update only allowed fields
@@ -148,7 +148,7 @@ public class MedicoService {
   public void updateMedico_getReferenceById(MedicoUpdateDTO medicoUpdateDTO) {
 
     // Get the medico from the DB
-    Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.id());
+    Medico medico = medicoRepository.getReferenceById(medicoUpdateDTO.idMedico());
 
     // Update only allowed fields
     if (medicoUpdateDTO.nombre() != null) {

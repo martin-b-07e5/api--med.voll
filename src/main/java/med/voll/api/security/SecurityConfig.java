@@ -46,7 +46,7 @@ public class SecurityConfig {
           req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Allow access without authentication
           req.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");  // POST only for admin
           req.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");   // PUT only for admin
-          req.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN");   // DELETE only for admin
+//          req.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN");   // DELETE only for admin
           req.requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN"); // DELETE only for admin
           req.requestMatchers(HttpMethod.GET, "/**").hasAnyRole("ADMIN", "USER");  // Read access for both admin and user
           req.anyRequest().authenticated();  // Authentication required for all other endpoints

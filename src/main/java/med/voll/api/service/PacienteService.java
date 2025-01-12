@@ -1,8 +1,9 @@
 package med.voll.api.service;
 
-import med.voll.api.entity.*;
+import med.voll.api.domain.paciente.Paciente;
+import med.voll.api.domain.paciente.PacienteDTO;
+import med.voll.api.domain.paciente.PacienteListadoDTO;
 import med.voll.api.repository.MedicoRepository;
-import med.voll.api.repository.PacienteRepository;
 import med.voll.api.mapper.PacienteValidatorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,12 +18,12 @@ import java.util.List;
 public class PacienteService {
 
   private final PacienteValidatorMapper pacienteValidatorMapper;
-  private final PacienteRepository pacienteRepository;
+  private final med.voll.api.repository.PacienteRepository pacienteRepository;
   private final MedicoRepository medicoRepository;
 
   // Constructor-based dependency injection
   @Autowired
-  public PacienteService(PacienteValidatorMapper pacienteValidatorMapper, PacienteRepository pacienteRepository,
+  public PacienteService(PacienteValidatorMapper pacienteValidatorMapper, med.voll.api.repository.PacienteRepository pacienteRepository,
                          MedicoRepository medicoRepository) {
     this.pacienteValidatorMapper = pacienteValidatorMapper;
     this.pacienteRepository = pacienteRepository;

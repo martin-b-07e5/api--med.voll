@@ -1,9 +1,9 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.entity.Paciente;
-import med.voll.api.entity.PacienteDTO;
-import med.voll.api.entity.PacienteListadoDTO;
+import med.voll.api.domain.paciente.Paciente;
+import med.voll.api.domain.paciente.PacienteDTO;
+import med.voll.api.domain.paciente.PacienteListadoDTO;
 import med.voll.api.service.PacienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

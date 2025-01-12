@@ -1,10 +1,11 @@
-package med.voll.api.entity;
+package med.voll.api.domain.medico;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import med.voll.api.domain.direccion.Direccion;
 
 public record MedicoUpdateDTO(
-    @NotNull Long id,
+    @NotNull Long idMedico,
     String nombre,
     String documento,
     @Valid Direccion direccion
@@ -12,7 +13,7 @@ public record MedicoUpdateDTO(
 
   // Constructor to map Medico entity to MedicoUpdateDTO
   public MedicoUpdateDTO(Medico medico) {
-    this(medico.getId(), medico.getNombre(), medico.getDocumento(), medico.getDireccion());
+    this(medico.getIdMedico(), medico.getNombre(), medico.getDocumento(), medico.getDireccion());
   }
 
 }

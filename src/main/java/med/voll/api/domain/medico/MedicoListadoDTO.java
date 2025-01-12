@@ -1,7 +1,7 @@
-package med.voll.api.entity;
+package med.voll.api.domain.medico;
 
 public record MedicoListadoDTO(
-    Long id,
+    Long idMedico,
     String nombre,
     String especialidad,
     String documento,
@@ -11,7 +11,7 @@ public record MedicoListadoDTO(
 
   // constructor to map Medico entity to MedicoListadoDTO
   public MedicoListadoDTO(Medico medico) {
-    this(medico.getId(), medico.getNombre(), medico.getEspecialidad().toString(), medico.getDocumento(),
+    this(medico.getIdMedico(), medico.getNombre(), medico.getEspecialidad().toString(), medico.getDocumento(),
         medico.getEmail(), medico.getInactivo());
   }
 

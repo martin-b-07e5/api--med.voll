@@ -1,9 +1,9 @@
 package med.voll.api.mapper;
 
-import med.voll.api.entity.DireccionDTO;
-import med.voll.api.entity.EspecialidadEnum;
-import med.voll.api.entity.Medico;
-import med.voll.api.entity.MedicoDTO;
+import med.voll.api.domain.direccion.DireccionDTO;
+import med.voll.api.domain.medico.EspecialidadEnum;
+import med.voll.api.domain.medico.Medico;
+import med.voll.api.domain.medico.MedicoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import jakarta.validation.Validation;

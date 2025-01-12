@@ -1,7 +1,7 @@
 package med.voll.api.security;
 
 import jakarta.validation.Valid;
-import med.voll.api.entity.Usuario;
+import med.voll.api.domain.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
