@@ -25,8 +25,16 @@ public class ConsultaController {
   public ResponseEntity<ConsultaDatosDetalleDTO> reservar(@RequestBody @Valid ConsultaDatosReservaDTO consultaDatosReservaDTO) {
     System.out.println("[ConsultaController]consultaDatosReservaDTO: " + consultaDatosReservaDTO);
 
-    consultaReservaService.reservar(consultaDatosReservaDTO);
-    return ResponseEntity.ok(new ConsultaDatosDetalleDTO(null, null, null, null));
+    var consulta = consultaReservaService.reservar(consultaDatosReservaDTO);
+
+    var consultaDetalleDTO = new ConsultaDatosDetalleDTO(
+        consulta.getIdConsulta(),
+        consulta.getMedico().getIdMedico(),
+        consulta.getPaciente().getIdPaciente(),
+        consulta.getFecha()
+    );
+
+    return ResponseEntity.ok(consultaDetalleDTO);
   }
 
 //  @GetMapping
