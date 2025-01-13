@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.LocalDateTime;
 
-public class HorarioAtencionValidator implements ConstraintValidator<HorarioAtencion, LocalDateTime> {
+public class BusinessHoursValidator implements ConstraintValidator<BusinessHours, LocalDateTime> {
 
   @Override
   public boolean isValid(LocalDateTime fecha, ConstraintValidatorContext context) {

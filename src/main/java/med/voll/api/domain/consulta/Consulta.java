@@ -39,5 +39,9 @@ public class Consulta {
   @Future
   LocalDateTime fecha;
 
+  public LocalDateTime getFechaFin() {
+    return fecha.plusHours(1);
+  }
+
 
 }

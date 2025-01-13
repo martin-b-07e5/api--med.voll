@@ -10,7 +10,10 @@ public record ConsultaDatosDetalleDTO(
     Long idConsulta,
     Long idMedico,
     Long idPaciente,
-//    LocalDateTime fecha
-    @NotNull @Future @JsonFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime fecha
+    @NotNull @Future @JsonFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime fechaInicio,
+    @NotNull @Future @JsonFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime fechaFin
 ) {
+  public ConsultaDatosDetalleDTO(Long idConsulta, Long idMedico, Long idPaciente, LocalDateTime fechaInicio) {
+    this(idConsulta, idMedico, idPaciente, fechaInicio, fechaInicio.plusHours(1));
+  }
 }

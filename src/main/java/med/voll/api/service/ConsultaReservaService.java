@@ -1,5 +1,6 @@
 package med.voll.api.service;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaDatosReservaDTO;
@@ -24,19 +25,22 @@ public class ConsultaReservaService {
   @Autowired
   private ConsultaRepository consultaRepository;
 
-
+  @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
 
-    var horaInicio = 7; // 07:00 hs
-    var horaFin = 19;   // 19:00 hs
+    // Check to see if the doctor already has a consultation in that time range.
+    boolean consultaExistente = consultaRepository.existsByMedico_IdMedicoAndFechaBetween(
+        datos.idMedico(),
+        datos.fecha(),
+        datos.fecha().plusHours(1)
+    );
 
-    // Validar el horario de la consulta
-    if (datos.fecha().getHour() < horaInicio || datos.fecha().getHour() >= horaFin) {
-      throw new IllegalArgumentException("La hora de la consulta debe estar entre las 07:00 y las 19:00.");
+    if (consultaExistente) {
+      throw new IllegalArgumentException("The doctor already has a consultation scheduled at this time.");
     }
 
-    var medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new RuntimeException("Medico no encontrado"));
-    var paciente = pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+    var medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new RuntimeException("Doctor not found"));
+    var paciente = pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new RuntimeException("Patient not found"));
     var fecha = datos.fecha();
     var consulta = new Consulta(null, medico, paciente, fecha);
 
@@ -47,7 +51,7 @@ public class ConsultaReservaService {
   }
 
   private void printTemp(@Valid ConsultaDatosReservaDTO datos, Medico medico, Paciente paciente, LocalDateTime fecha, Consulta consulta) {
-    System.out.println("[ConsultaReservaService][reservar]Reservando consulta: " + datos);
+    System.out.println("[ConsultaReservaService][reservar]Make an appointment: " + datos);
     System.out.println("\nmedico: " + medico);
     System.out.println("paciente: " + paciente);
     System.out.println("fecha: " + fecha);

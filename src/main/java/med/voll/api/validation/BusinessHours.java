@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = HorarioAtencionValidator.class)
-public @interface HorarioAtencion {
+@Constraint(validatedBy = BusinessHoursValidator.class)
+public @interface BusinessHours {
   String message() default "The time must be between 07:00 and 19:00.";
 
   Class<?>[] groups() default {};
