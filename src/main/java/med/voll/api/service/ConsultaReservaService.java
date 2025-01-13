@@ -44,6 +44,9 @@ public class ConsultaReservaService {
     // Buscar o seleccionar médico disponible
     Medico medico = obtenerMedico(datos);
 
+    // Validar que el médico esté activo
+    validarMedicoActivo(medico);
+
     // Validar que el médico tenga disponibilidad en la hora solicitada
     validarDisponibilidadMedico(medico, datos.fecha());
 
@@ -76,6 +79,13 @@ public class ConsultaReservaService {
           .orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
     }
     return seleccionarMedicoAleatorioDisponible(datos.fecha());
+  }
+
+  // Validar que el médico esté activo
+  private void validarMedicoActivo(Medico medico) {
+    if (medico.getInactivo() != null && medico.getInactivo()) {
+      throw new IllegalArgumentException("The selected doctor is INACTIVE and cannot accept new appointments.");
+    }
   }
 
   // Validar que el médico no tenga una consulta en la misma hora
