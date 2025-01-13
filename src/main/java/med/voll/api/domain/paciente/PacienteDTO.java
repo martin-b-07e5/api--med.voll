@@ -25,9 +25,10 @@ public record PacienteDTO(
     @Pattern(regexp = "^\\d{4,10}$", message = "The value must be a 4 to 10 digit number.")
     String telefono,
 
-    @NotNull
-    @Valid
-    DireccionDTO direccion
+    @NotNull @Valid DireccionDTO direccion,
+
+    @NotNull Boolean inactivo
+
 ) {
 
 }

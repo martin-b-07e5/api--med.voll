@@ -53,6 +53,9 @@ public class ConsultaReservaService {
     // Buscar al paciente
     Paciente paciente = obtenerPaciente(datos.idPaciente());
 
+    // Validar que el paciente esté activo
+    validarPacienteActivo(paciente);
+
     // Crear y guardar la consulta
     return crearConsulta(medico, paciente, datos.fecha());
   }
@@ -101,6 +104,14 @@ public class ConsultaReservaService {
     return pacienteRepository.findById(idPaciente)
         .orElseThrow(() -> new PatientNotFoundException(idPaciente));
   }
+
+  // Validar que el paciente esté activo
+  private void validarPacienteActivo(Paciente paciente) {
+    if (paciente.getInactivo() != null && paciente.getInactivo()) {
+      throw new IllegalArgumentException("The selected Patient is INACTIVE and cannot make appointments.");
+    }
+  }
+
 
   // Crear y guardar la consulta
   private Consulta crearConsulta(Medico medico, Paciente paciente, LocalDateTime fecha) {

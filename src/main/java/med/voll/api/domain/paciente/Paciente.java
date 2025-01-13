@@ -48,6 +48,9 @@ public class Paciente {
   @JsonProperty("direccion")
   private Direccion direccion;
 
+  @Column
+  private Boolean inactivo;
+
 
   // default constructor
   public Paciente() {
@@ -60,6 +63,7 @@ public class Paciente {
     this.documento = datos.documento();
     this.telefono = datos.telefono();
     this.direccion = new Direccion(datos);
+    this.inactivo = datos.inactivo(); // this.inactivo = false
   }
 
 
@@ -72,6 +76,7 @@ public class Paciente {
         ", documento='" + documento + '\'' +
         ", telefono='" + telefono + '\'' +
         ", direccion=" + direccion +
+        ", inactivo=" + inactivo +
         '}';
   }
 
