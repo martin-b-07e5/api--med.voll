@@ -6,6 +6,8 @@ import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaDatosReservaDTO;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.paciente.Paciente;
+import med.voll.api.exception.MedicoNotFoundException;
+import med.voll.api.exception.PatientNotFoundException;
 import med.voll.api.repository.ConsultaRepository;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.repository.PacienteRepository;
@@ -39,8 +41,8 @@ public class ConsultaReservaService {
       throw new IllegalArgumentException("The doctor already has a consultation scheduled at this time.");
     }
 
-    var medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new RuntimeException("Doctor not found"));
-    var paciente = pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new RuntimeException("Patient not found"));
+    var medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
+    var paciente = pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
     var fecha = datos.fecha();
     var consulta = new Consulta(null, medico, paciente, fecha);
 
@@ -60,6 +62,5 @@ public class ConsultaReservaService {
     System.out.println("consulta.getPaciente().getIdPaciente()): " + consulta.getPaciente().getIdPaciente());
     System.out.println("consulta.getFecha()): " + consulta.getFecha());
   }
-
 
 }

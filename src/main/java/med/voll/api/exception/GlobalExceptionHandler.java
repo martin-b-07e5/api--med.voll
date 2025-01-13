@@ -36,6 +36,19 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // Retorna 404 Not Found
   }
 
+  @ExceptionHandler(PatientNotFoundException.class)
+  public ResponseEntity<Map<String, Object>> handlePatientNotFoundException(PatientNotFoundException ex) {
+    Map<String, Object> response = Map.of(
+        "message", ex.getMessage(),
+        "timestamp", LocalDateTime.now(),
+        "error", "Not Found",
+        "path", request.getRequestURI(),
+        "status", HttpStatus.NOT_FOUND.value()
+    );
+
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // Retorna 404 Not Found
+  }
+
 
   // Handler for IllegalStateException
   @ExceptionHandler(IllegalStateException.class)
@@ -83,6 +96,5 @@ public class GlobalExceptionHandler {
     response.put("message", ex.getMessage());
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
-
 
 }

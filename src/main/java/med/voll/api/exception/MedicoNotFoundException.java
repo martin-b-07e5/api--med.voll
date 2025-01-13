@@ -7,7 +7,7 @@ public class MedicoNotFoundException extends RuntimeException {
   }
 
   public MedicoNotFoundException(Long id) {
-    super("Médico no encontrado con ID: " + id);
+    super("Doctor not found with ID: " + id);
   }
 
 }
