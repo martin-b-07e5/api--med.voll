@@ -33,7 +33,17 @@ public class ConsultaReservaService {
   @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
 
-    // Buscar al médico (proporcionado o seleccionar uno aleatorio)
+    // Validar que el paciente no tenga otra consulta el mismo día
+    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(
+        datos.idPaciente(),
+        datos.fecha()
+    );
+
+    if (consultaEnElMismoDia) {
+      throw new IllegalArgumentException("The patient already has a consultation scheduled on the same day.");
+    }
+
+    // Lógica existente para buscar o seleccionar médico, validar disponibilidad, etc.
     Medico medico = null;
     if (datos.idMedico() != null) {
       medico = medicoRepository.findById(datos.idMedico())
@@ -62,8 +72,6 @@ public class ConsultaReservaService {
     Consulta consulta = new Consulta(null, medico, paciente, datos.fecha());
     consultaRepository.save(consulta);
 
-    printTemp(datos, medico, paciente, datos.fecha(), consulta);
-
     return consulta;
   }
 
@@ -83,19 +91,5 @@ public class ConsultaReservaService {
     return medicosDisponibles.get(random.nextInt(medicosDisponibles.size()));
   }
 
-  private void printTemp(@Valid ConsultaDatosReservaDTO datos, Medico medico, Paciente paciente, LocalDateTime fecha, Consulta consulta) {
-    System.out.println("[ConsultaReservaService][reservar]Make an appointment: " + datos);
-    System.out.println("------------------------");
-    System.out.println("datos.idMedico(): " + datos.idMedico());
-    System.out.println("medico.getIdMedico(): " + medico.getIdMedico());
-    System.out.println("------------------------");
-    System.out.println("\nmedico: " + medico);
-    System.out.println("paciente: " + paciente);
-    System.out.println("fecha: " + fecha);
-    System.out.println("\nconsulta.getIdConsulta()): " + consulta.getIdConsulta());
-    System.out.println("consulta.getMedico().getIdMedico()): " + consulta.getMedico().getIdMedico());
-    System.out.println("consulta.getPaciente().getIdPaciente()): " + consulta.getPaciente().getIdPaciente());
-    System.out.println("consulta.getFecha()): " + consulta.getFecha());
-  }
 
 }
