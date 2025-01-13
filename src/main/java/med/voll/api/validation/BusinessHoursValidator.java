@@ -12,7 +12,15 @@ public class BusinessHoursValidator implements ConstraintValidator<BusinessHours
     if (fecha == null) {
       return false;
     }
-    int hora = fecha.getHour();
-    return hora >= 7 && hora < 19;
+
+    // Validar que sea de lunes a viernes
+    if (fecha.getDayOfWeek().getValue() < 1 || fecha.getDayOfWeek().getValue() > 5) {
+      return false; // Solo lunes a viernes
+    }
+
+    // Check if the time falls within the business hours (07:00 to 19:00)
+    int businessHours = fecha.getHour();
+    return businessHours >= 7 && businessHours < 19;
   }
+
 }
