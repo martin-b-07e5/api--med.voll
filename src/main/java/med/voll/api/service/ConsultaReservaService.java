@@ -33,9 +33,19 @@ public class ConsultaReservaService {
   @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
 
-    // Check to see if the doctor already has a consultation in that time range.
-    boolean consultaExistente = consultaRepository.existsByMedico_IdMedicoAndFechaBetween(
-        datos.idMedico(),
+    // Buscar al médico (proporcionado o seleccionar uno aleatorio)
+    Medico medico = null;
+    if (datos.idMedico() != null) {
+      medico = medicoRepository.findById(datos.idMedico())
+          .orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
+    }
+    if (medico == null) {
+      medico = seleccionarMedicoAleatorioDisponible(datos.fecha());
+    }
+
+    // Validar si el médico tiene una consulta en la misma fecha y hora
+    boolean consultaExistente = consultaRepository.existsConsultaConConflicto(
+        medico.getIdMedico(),
         datos.fecha(),
         datos.fecha().plusHours(1)
     );
@@ -44,27 +54,16 @@ public class ConsultaReservaService {
       throw new IllegalArgumentException("The doctor already has a consultation scheduled at this time.");
     }
 
-    // Search the doctor
-    Medico medico = null;
-    // if a doctor who does not exist is provided, launch an exception.
-    if (datos.idMedico() != null) {
-      medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
-    }
-    // If no doctor is provided, choose an available random one.
-    if (medico == null) {
-      medico = seleccionarMedicoAleatorioDisponible(datos.fecha());
-    }
-
-    Paciente paciente =
-        pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
-    LocalDateTime fecha = datos.fecha();
+    // Buscar al paciente
+    Paciente paciente = pacienteRepository.findById(datos.idPaciente())
+        .orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
 
     // Crear y guardar la consulta
-    Consulta consulta = new Consulta(null, medico, paciente, fecha);
-
-    printTemp(datos, medico, paciente, fecha, consulta);
-
+    Consulta consulta = new Consulta(null, medico, paciente, datos.fecha());
     consultaRepository.save(consulta);
+
+    printTemp(datos, medico, paciente, datos.fecha(), consulta);
+
     return consulta;
   }
 
@@ -86,6 +85,10 @@ public class ConsultaReservaService {
 
   private void printTemp(@Valid ConsultaDatosReservaDTO datos, Medico medico, Paciente paciente, LocalDateTime fecha, Consulta consulta) {
     System.out.println("[ConsultaReservaService][reservar]Make an appointment: " + datos);
+    System.out.println("------------------------");
+    System.out.println("datos.idMedico(): " + datos.idMedico());
+    System.out.println("medico.getIdMedico(): " + medico.getIdMedico());
+    System.out.println("------------------------");
     System.out.println("\nmedico: " + medico);
     System.out.println("paciente: " + paciente);
     System.out.println("fecha: " + fecha);
