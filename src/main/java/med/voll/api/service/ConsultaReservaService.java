@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+
 @Service
 public class ConsultaReservaService {
 
@@ -26,7 +27,6 @@ public class ConsultaReservaService {
   private MedicoRepository medicoRepository;
   @Autowired
   private PacienteRepository pacienteRepository;
-
   @Autowired
   private ConsultaRepository consultaRepository;
 
@@ -34,62 +34,69 @@ public class ConsultaReservaService {
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
 
     // Validar que el paciente no tenga otra consulta el mismo día
-    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(
-        datos.idPaciente(),
-        datos.fecha()
-    );
+    validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());
 
+    // Buscar o seleccionar médico disponible
+    Medico medico = obtenerMedico(datos);
+
+    // Validar que el médico tenga disponibilidad en la hora solicitada
+    validarDisponibilidadMedico(medico, datos.fecha());
+
+    // Buscar al paciente
+    Paciente paciente = obtenerPaciente(datos.idPaciente());
+
+    // Crear y guardar la consulta
+    return crearConsulta(medico, paciente, datos.fecha());
+  }
+
+  // Validar que el paciente no tenga otra consulta el mismo día
+  private void validarConsultaEnElMismoDia(Long idPaciente, LocalDateTime fecha) {
+    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(idPaciente, fecha);
     if (consultaEnElMismoDia) {
       throw new IllegalArgumentException("The patient already has a consultation scheduled on the same day.");
     }
+  }
 
-    // Lógica existente para buscar o seleccionar médico, validar disponibilidad, etc.
-    Medico medico = null;
+  // Obtener el médico, ya sea uno proporcionado o uno aleatorio disponible
+  private Medico obtenerMedico(ConsultaDatosReservaDTO datos) {
     if (datos.idMedico() != null) {
-      medico = medicoRepository.findById(datos.idMedico())
+      return medicoRepository.findById(datos.idMedico())
           .orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
     }
-    if (medico == null) {
-      medico = seleccionarMedicoAleatorioDisponible(datos.fecha());
-    }
+    return seleccionarMedicoAleatorioDisponible(datos.fecha());
+  }
 
-    // Validar si el médico tiene una consulta en la misma fecha y hora
-    boolean consultaExistente = consultaRepository.existsConsultaConConflicto(
-        medico.getIdMedico(),
-        datos.fecha(),
-        datos.fecha().plusHours(1)
-    );
-
+  // Validar que el médico no tenga una consulta en la misma hora
+  private void validarDisponibilidadMedico(Medico medico, LocalDateTime fechaHora) {
+    boolean consultaExistente = consultaRepository.existsConsultaConConflicto(medico.getIdMedico(), fechaHora, fechaHora.plusHours(1));
     if (consultaExistente) {
       throw new IllegalArgumentException("The doctor already has a consultation scheduled at this time.");
     }
+  }
 
-    // Buscar al paciente
-    Paciente paciente = pacienteRepository.findById(datos.idPaciente())
-        .orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
+  // Obtener al paciente desde la base de datos
+  private Paciente obtenerPaciente(Long idPaciente) {
+    return pacienteRepository.findById(idPaciente)
+        .orElseThrow(() -> new PatientNotFoundException(idPaciente));
+  }
 
-    // Crear y guardar la consulta
-    Consulta consulta = new Consulta(null, medico, paciente, datos.fecha());
+  // Crear y guardar la consulta
+  private Consulta crearConsulta(Medico medico, Paciente paciente, LocalDateTime fecha) {
+    Consulta consulta = new Consulta(null, medico, paciente, fecha);
     consultaRepository.save(consulta);
-
     return consulta;
   }
 
-  // Method to select a random physician available at the date and time provided.
+  // Método para seleccionar un médico aleatorio disponible
   private Medico seleccionarMedicoAleatorioDisponible(LocalDateTime fechaHora) {
-
-    // Search for physicians available at that date/time
     List<Medico> medicosDisponibles = medicoRepository.findMedicosDisponibles(fechaHora);
 
-    // Si no hay médicos disponibles, lanzar una excepción o devolver un valor predeterminado
     if (medicosDisponibles.isEmpty()) {
       throw new NoAvailableDoctorException("No doctors are available at the chosen time.");
     }
 
-    // Seleccionar aleatoriamente un médico de los disponibles
     Random random = new Random();
     return medicosDisponibles.get(random.nextInt(medicosDisponibles.size()));
   }
-
 
 }
