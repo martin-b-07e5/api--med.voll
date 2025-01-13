@@ -18,9 +18,14 @@ public class BusinessHoursValidator implements ConstraintValidator<BusinessHours
       return false; // Solo lunes a viernes
     }
 
-    // Check if the time falls within the business hours (07:00 to 19:00)
-    int businessHours = fecha.getHour();
-    return businessHours >= 7 && businessHours < 19;
+    // Validar que la hora esté entre 07:00 y 18:00 (hora de inicio de la consulta)
+    int hour = fecha.getHour();
+    int minute = fecha.getMinute();
+
+    // Citas deben comenzar como máximo a las 18:00:00
+    boolean withinBusinessHours = (hour > 7 || (hour == 7 && minute >= 0)) && (hour < 18 || (hour == 18 && minute == 0));
+
+    return withinBusinessHours;
   }
 
 }

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = BusinessHoursValidator.class)
 public @interface BusinessHours {
-  String message() default "The appointment must be made from Monday to Friday, between 07:00 and 19:00 hours.";
+  String message() default "The appointment must be made from Monday to Friday, between 07:00 and 18:00 hours.";
 
   Class<?>[] groups() default {};
 
