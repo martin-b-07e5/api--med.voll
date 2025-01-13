@@ -2,6 +2,8 @@ package med.voll.api.service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaDatosReservaDTO;
 import med.voll.api.domain.medico.Medico;
@@ -33,6 +35,9 @@ public class ConsultaReservaService {
   @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
 
+    // Validar que la consulta sea programada con al menos 30 minutos de anticipación
+    validarAnticipacionConsulta(datos.fecha());
+
     // Validar que el paciente no tenga otra consulta el mismo día
     validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());
 
@@ -47,6 +52,13 @@ public class ConsultaReservaService {
 
     // Crear y guardar la consulta
     return crearConsulta(medico, paciente, datos.fecha());
+  }
+
+  private void validarAnticipacionConsulta(@NotNull @Future LocalDateTime fecha) {
+    LocalDateTime now = LocalDateTime.now();
+    if (fecha.isBefore(now.plusMinutes(30))) {
+      throw new IllegalArgumentException("Appointments must be scheduled at least 30 minutes in advance.");
+    }
   }
 
   // Validar que el paciente no tenga otra consulta el mismo día
