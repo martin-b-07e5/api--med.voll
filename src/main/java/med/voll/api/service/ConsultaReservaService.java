@@ -7,6 +7,7 @@ import med.voll.api.domain.consulta.ConsultaDatosReservaDTO;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.paciente.Paciente;
 import med.voll.api.exception.MedicoNotFoundException;
+import med.voll.api.exception.NoAvailableDoctorException;
 import med.voll.api.exception.PatientNotFoundException;
 import med.voll.api.repository.ConsultaRepository;
 import med.voll.api.repository.MedicoRepository;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class ConsultaReservaService {
@@ -41,15 +44,44 @@ public class ConsultaReservaService {
       throw new IllegalArgumentException("The doctor already has a consultation scheduled at this time.");
     }
 
-    var medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
-    var paciente = pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
-    var fecha = datos.fecha();
-    var consulta = new Consulta(null, medico, paciente, fecha);
+    // Search the doctor
+    Medico medico = null;
+    // if a doctor who does not exist is provided, launch an exception.
+    if (datos.idMedico() != null) {
+      medico = medicoRepository.findById(datos.idMedico()).orElseThrow(() -> new MedicoNotFoundException(datos.idMedico()));
+    }
+    // If no doctor is provided, choose an available random one.
+    if (medico == null) {
+      medico = seleccionarMedicoAleatorioDisponible(datos.fecha());
+    }
+
+    Paciente paciente =
+        pacienteRepository.findById(datos.idPaciente()).orElseThrow(() -> new PatientNotFoundException(datos.idPaciente()));
+    LocalDateTime fecha = datos.fecha();
+
+    // Crear y guardar la consulta
+    Consulta consulta = new Consulta(null, medico, paciente, fecha);
 
     printTemp(datos, medico, paciente, fecha, consulta);
 
     consultaRepository.save(consulta);
     return consulta;
+  }
+
+  // Method to select a random physician available at the date and time provided.
+  private Medico seleccionarMedicoAleatorioDisponible(LocalDateTime fechaHora) {
+
+    // Search for physicians available at that date/time
+    List<Medico> medicosDisponibles = medicoRepository.findMedicosDisponibles(fechaHora);
+
+    // Si no hay médicos disponibles, lanzar una excepción o devolver un valor predeterminado
+    if (medicosDisponibles.isEmpty()) {
+      throw new NoAvailableDoctorException("No doctors are available at the chosen time.");
+    }
+
+    // Seleccionar aleatoriamente un médico de los disponibles
+    Random random = new Random();
+    return medicosDisponibles.get(random.nextInt(medicosDisponibles.size()));
   }
 
   private void printTemp(@Valid ConsultaDatosReservaDTO datos, Medico medico, Paciente paciente, LocalDateTime fecha, Consulta consulta) {

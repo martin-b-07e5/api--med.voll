@@ -49,6 +49,19 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // Retorna 404 Not Found
   }
 
+  @ExceptionHandler(NoAvailableDoctorException.class)
+  public ResponseEntity<Map<String, Object>> handleNoAvailableDoctorException(NoAvailableDoctorException ex) {
+    Map<String, Object> response = Map.of(
+        "timestamp", LocalDateTime.now(),
+        "status", HttpStatus.NOT_FOUND.value(),
+        "error", "Not Found",
+        "message", ex.getMessage(),
+        "path", request.getRequestURI()
+    );
+
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+  }
+
 
   // Handler for IllegalStateException
   @ExceptionHandler(IllegalStateException.class)
