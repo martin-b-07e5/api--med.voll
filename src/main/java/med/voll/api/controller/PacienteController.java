@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.paciente.Paciente;
 import med.voll.api.domain.paciente.PacienteDTO;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pacientes")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
   private static final Logger logger = LoggerFactory.getLogger(PacienteController.class);
