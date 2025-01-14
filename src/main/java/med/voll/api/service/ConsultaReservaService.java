@@ -2,8 +2,6 @@ package med.voll.api.service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.consulta.ConsultaDatosReservaDTO;
 import med.voll.api.domain.medico.Medico;
@@ -43,11 +41,9 @@ public class ConsultaReservaService {
     System.out.println("\ndatos:" + datos);
 
     // Validar que la consulta sea programada con al menos 30 minutos de anticipación
-//    validarAnticipacionConsulta(datos.fecha()); // viejo. funciona
     validarAnticipacionConsulta.validarAnticipacionConsulta(datos.fecha());
 
     // Validar que el paciente no tenga otra consulta el mismo día
-//    validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());  // viejo. funciona
     validarConsultaEnElMismoDia.validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());
 
     // Buscar o seleccionar médico disponible
@@ -69,20 +65,6 @@ public class ConsultaReservaService {
     return crearConsulta(medico, paciente, datos.fecha());
   }
 
-//  private void validarAnticipacionConsulta(@NotNull @Future LocalDateTime fecha) {
-//    LocalDateTime now = LocalDateTime.now();
-//    if (fecha.isBefore(now.plusMinutes(30))) {
-//      throw new IllegalArgumentException("Appointments must be scheduled at least 30 minutes in advance.");
-//    }
-//  }
-
-  // Validar que el paciente no tenga otra consulta el mismo día
-//  private void validarConsultaEnElMismoDia(Long idPaciente, LocalDateTime fecha) {
-//    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(idPaciente, fecha);
-//    if (consultaEnElMismoDia) {
-//      throw new IllegalArgumentException("The patient already has a consultation scheduled on the same day.");
-//    }
-//  }
 
   // Obtener el médico, ya sea uno proporcionado o uno aleatorio disponible
   private Medico obtenerMedico(ConsultaDatosReservaDTO datos) {
