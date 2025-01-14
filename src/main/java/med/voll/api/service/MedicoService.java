@@ -89,9 +89,9 @@ public class MedicoService {
   }
 
   @Transactional(readOnly = true)
-  public Medico getMedicoById(Long id) {
-    return medicoRepository.findById(id)
-        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado con ID: " + id));
+  public Medico getMedicoById(Long idMedico) {
+    return medicoRepository.findById(idMedico)
+        .orElseThrow(() -> new MedicoNotFoundException("Médico no encontrado con ID: " + idMedico));
   }
 
   /// create ------------------------------------------------------------------
@@ -165,9 +165,9 @@ public class MedicoService {
 //    medicoRepository.save(medico);
   }
 
-  public String excluirMedicoPojo(Long id) {
-    Medico medico = medicoRepository.findById(id)
-        .orElseThrow(() -> new MedicoNotFoundException(id));  // Custom exception
+  public String excluirMedicoPojo(Long idMedico) {
+    Medico medico = medicoRepository.findById(idMedico)
+        .orElseThrow(() -> new MedicoNotFoundException(idMedico));  // Custom exception
 
     if (medico.getInactivo()) {
       throw new IllegalStateException("El médico ya está marcado como inactivo");
@@ -176,12 +176,12 @@ public class MedicoService {
     medico.setInactivo(true); // Mark the doctor as inactive
     medicoRepository.save(medico); // Save changes to the database
 
-    return "Médico con ID " + id + " marcado como inactivo correctamente.";
+    return "Médico con ID " + idMedico + " marcado como inactivo correctamente.";
   }
 
-  public void excluirMedicoDTO(Long id, MedicoExclusionDTO medicoExclusionDTO) {
-    Medico medico = medicoRepository.findById(id)
-        .orElseThrow(() -> new MedicoNotFoundException(id));
+  public void excluirMedicoDTO(Long idMedico, MedicoExclusionDTO medicoExclusionDTO) {
+    Medico medico = medicoRepository.findById(idMedico)
+        .orElseThrow(() -> new MedicoNotFoundException(idMedico));
 
     if (medicoExclusionDTO.inactivo()) {
       if (medico.getInactivo()) {
@@ -202,15 +202,15 @@ public class MedicoService {
   /// delete ------------------------------------------------------------------
 
   @Transactional
-  public String eliminarMedicoHard(Long id) {
-    if (!medicoRepository.existsById(id)) {
-      throw new MedicoNotFoundException(id);  // Throw an exception if not found
+  public String eliminarMedicoHard(Long idMedico) {
+    if (!medicoRepository.existsById(idMedico)) {
+      throw new MedicoNotFoundException(idMedico);  // Throw an exception if not found
     }
     // We eliminate the doctor
-    medicoRepository.deleteById(id);
+    medicoRepository.deleteById(idMedico);
 
     // Success message
-    return "Médico con ID " + id + " eliminado exitosamente.";
+    return "Médico con ID " + idMedico + " eliminado exitosamente.";
 
   }
 

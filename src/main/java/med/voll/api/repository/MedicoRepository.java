@@ -18,7 +18,7 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
 
   boolean existsByDocumento(String documento);
 
-  boolean existsById(Long id);
+  boolean existsByIdMedico(Long idMedico);
 
   List<Medico> findByInactivoTrue();
 

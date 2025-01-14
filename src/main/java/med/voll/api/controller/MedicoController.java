@@ -33,6 +33,32 @@ public class MedicoController {
 
   ///  read -------------------------------------------------------------------
 
+  @GetMapping
+  // http://localhost:8080/medicos?page=0&size=2&sort=idMedico,asc
+  public Page<MedicoListadoDTO> listarPaginado(
+      @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
+
+    // Print by console (log)
+    logger.info("Página solicitada: {}", pageable.getPageNumber());
+    logger.info("Tamaño de página: {}", pageable.getPageSize());
+    logger.info("Ordenamiento: {}", pageable.getSort());
+
+    return medicoService.listarPaginado(pageable);
+  }
+
+  @GetMapping("/{idMedico}")  // Endpoint to get a doctor's details by ID
+//  http://localhost:8080/medicos/57
+  public ResponseEntity<MedicoDTO> getMedicoById(@PathVariable Long idMedico) {
+    Medico medico = medicoService.getMedicoById(idMedico);  // Fetch the doctor from the service
+    if (medico != null) {
+      MedicoDTO medicoDTO = new MedicoDTO(medico);  // Map the entity to DTO
+      return ResponseEntity.ok(medicoDTO);  // Return the doctor's details in the response
+    } else {
+      return ResponseEntity.notFound().build();  // Return 404 if the doctor is not found
+    }
+  }
+
+
   @GetMapping("/listar")
   //  http://localhost:8080/medicos/listar
   public List<Medico> listarMedicos() {
@@ -45,18 +71,6 @@ public class MedicoController {
     return medicoService.listarDTO();
   }
 
-  @GetMapping
-  // http://localhost:8080/medicos?page=0&size=2&sort=nombre,asc
-  public Page<MedicoListadoDTO> listarPaginado(
-      @PageableDefault(size = 2, sort = "nombre", direction = Sort.Direction.ASC) Pageable pageable) {
-
-    // Print by console (log)
-    logger.info("Página solicitada: {}", pageable.getPageNumber());
-    logger.info("Tamaño de página: {}", pageable.getPageSize());
-    logger.info("Ordenamiento: {}", pageable.getSort());
-
-    return medicoService.listarPaginado(pageable);
-  }
 
   @GetMapping("/equivalente")
   // http://localhost:8080/medicos/equivalente?page=0&size=2&sort=nombre,asc
@@ -65,17 +79,6 @@ public class MedicoController {
     return medicoService.listarPaginadoEquivalente(pageable);
   }
 
-  @GetMapping("/{idMedico}")  // Endpoint to get a doctor's details by ID
-//  http://localhost:8080/medicos/57
-  public ResponseEntity<MedicoDTO> getMedicoById(@PathVariable Long id) {
-    Medico medico = medicoService.getMedicoById(id);  // Fetch the doctor from the service
-    if (medico != null) {
-      MedicoDTO medicoDTO = new MedicoDTO(medico);  // Map the entity to DTO
-      return ResponseEntity.ok(medicoDTO);  // Return the doctor's details in the response
-    } else {
-      return ResponseEntity.notFound().build();  // Return 404 if the doctor is not found
-    }
-  }
 
   @GetMapping("/inactivos")
   //  http://localhost:8080/medicos/inactivos devuelve entidades
