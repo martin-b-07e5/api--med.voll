@@ -44,6 +44,9 @@ public class SecurityConfig {
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(req -> {
           req.requestMatchers(HttpMethod.POST, "/login").permitAll();  // Allow access without authentication
+          req.requestMatchers("/swagger-ui.html").permitAll();  // Allow access without authentication
+          req.requestMatchers("/swagger-ui/**").permitAll();  // Allow access without authentication
+          req.requestMatchers("/v3/api-docs/**").permitAll();  // Allow access without authentication
           req.requestMatchers(HttpMethod.POST, "/**").hasRole("ADMIN");  // POST only for admin
           req.requestMatchers(HttpMethod.PUT, "/**").hasRole("ADMIN");   // PUT only for admin
 //          req.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN");   // DELETE only for admin
