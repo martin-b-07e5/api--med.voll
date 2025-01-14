@@ -14,6 +14,8 @@ import med.voll.api.exception.PatientNotFoundException;
 import med.voll.api.repository.ConsultaRepository;
 import med.voll.api.repository.MedicoRepository;
 import med.voll.api.repository.PacienteRepository;
+import med.voll.api.validation.ValidarAnticipacionConsulta;
+import med.voll.api.validation.ValidarConsultaEnElMismoDia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +33,22 @@ public class ConsultaReservaService {
   private PacienteRepository pacienteRepository;
   @Autowired
   private ConsultaRepository consultaRepository;
+  @Autowired
+  private ValidarAnticipacionConsulta validarAnticipacionConsulta;
+  @Autowired
+  private ValidarConsultaEnElMismoDia validarConsultaEnElMismoDia;
 
   @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
     System.out.println("\ndatos:" + datos);
 
     // Validar que la consulta sea programada con al menos 30 minutos de anticipación
-    validarAnticipacionConsulta(datos.fecha());
+//    validarAnticipacionConsulta(datos.fecha()); // viejo. funciona
+    validarAnticipacionConsulta.validarAnticipacionConsulta(datos.fecha());
 
     // Validar que el paciente no tenga otra consulta el mismo día
-    validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());
+//    validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());  // viejo. funciona
+    validarConsultaEnElMismoDia.validarConsultaEnElMismoDia(datos.idPaciente(), datos.fecha());
 
     // Buscar o seleccionar médico disponible
     Medico medico = obtenerMedico(datos);
@@ -61,20 +69,20 @@ public class ConsultaReservaService {
     return crearConsulta(medico, paciente, datos.fecha());
   }
 
-  private void validarAnticipacionConsulta(@NotNull @Future LocalDateTime fecha) {
-    LocalDateTime now = LocalDateTime.now();
-    if (fecha.isBefore(now.plusMinutes(30))) {
-      throw new IllegalArgumentException("Appointments must be scheduled at least 30 minutes in advance.");
-    }
-  }
+//  private void validarAnticipacionConsulta(@NotNull @Future LocalDateTime fecha) {
+//    LocalDateTime now = LocalDateTime.now();
+//    if (fecha.isBefore(now.plusMinutes(30))) {
+//      throw new IllegalArgumentException("Appointments must be scheduled at least 30 minutes in advance.");
+//    }
+//  }
 
   // Validar que el paciente no tenga otra consulta el mismo día
-  private void validarConsultaEnElMismoDia(Long idPaciente, LocalDateTime fecha) {
-    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(idPaciente, fecha);
-    if (consultaEnElMismoDia) {
-      throw new IllegalArgumentException("The patient already has a consultation scheduled on the same day.");
-    }
-  }
+//  private void validarConsultaEnElMismoDia(Long idPaciente, LocalDateTime fecha) {
+//    boolean consultaEnElMismoDia = consultaRepository.existsConsultaEnElMismoDia(idPaciente, fecha);
+//    if (consultaEnElMismoDia) {
+//      throw new IllegalArgumentException("The patient already has a consultation scheduled on the same day.");
+//    }
+//  }
 
   // Obtener el médico, ya sea uno proporcionado o uno aleatorio disponible
   private Medico obtenerMedico(ConsultaDatosReservaDTO datos) {
