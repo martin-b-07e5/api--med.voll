@@ -34,6 +34,7 @@ public class ConsultaReservaService {
 
   @Transactional
   public Consulta reservar(@Valid ConsultaDatosReservaDTO datos) {
+    System.out.println("\ndatos:" + datos);
 
     // Validar que la consulta sea programada con al menos 30 minutos de anticipación
     validarAnticipacionConsulta(datos.fecha());
